@@ -1,0 +1,7 @@
+# gruph
+Fits graphical models.
+
+# Todo
+
+* implement function to check for cycles
+  - implement set class
