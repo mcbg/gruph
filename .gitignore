@@ -1,4 +1,6 @@
 *.o
+
+gruph.RProj
 .Rproj.user
 .Rhistory
 .RData
