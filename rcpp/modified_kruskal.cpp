@@ -29,9 +29,12 @@ void get_large_edges (NumericMatrix xx)
   fl_priority_queue<w_edge, w_edge_greater> q(queue_size, {0, {0, 0}}); 
   std::vector<w_edge> outvec(queue_size, {0, {0, 0}});
   
-  for (int i = 0; i < xx.ncol();  ++i) {
+  for (int i = 0; i < xx.ncol();  ++i)
+  {
     NumericVector x = xx(_, i);
-    for (int j = i + 1; j < xx.ncol();  ++j) {
+    
+    for (int j = i + 1; j < xx.ncol();  ++j)
+    {
       NumericVector y = xx(_, j);
       double w = mutual_information(x, y);
       q.attempt_push({ w , {i, j}});
