@@ -10,8 +10,6 @@ using namespace Rcpp;
 
 typedef std::vector<double> vecdub;
 typedef std::pair<vecdub::iterator, vecdub::iterator> pairit;
-typedef std::pair<int, int> edge;
-typedef std::pair<double, edge> w_edge;
 
 
 class gaussian_mutual_information
