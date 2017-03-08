@@ -52,8 +52,3 @@ void get_large_edges (NumericMatrix xx)
   for(auto x : outvec) print_element(x);
   
 }
-
-// [[Rcpp::export]]
-void hi (NumericMatrix xx) {
-  get_large_edges<gaussian_mutual_information>(xx);
-}
