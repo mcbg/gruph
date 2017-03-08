@@ -1,4 +1,5 @@
 #include<Rcpp.h>
+#include<cmath>
 
 #include "fixed_length_priority_queue.cpp"
 #include "gaussian_mutual_information.cpp"
@@ -18,7 +19,7 @@ void get_large_edges (NumericMatrix xx)
   public:
     bool operator()(w_edge lhs, w_edge rhs)
     {
-      return lhs.first > rhs.first; 
+      return std::abs(lhs.first) > std::abs(rhs.first); 
     }
   };
   
