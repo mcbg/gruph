@@ -1,5 +1,9 @@
 *.o
 
+*.log
+*.pdf
+*.gz
+
 gruph.RProj
 .Rproj.user
 .Rhistory
