@@ -12,7 +12,7 @@ typedef std::pair<int, int> edge;
 typedef std::pair<double, edge> w_edge;
 
 template<class mutual_info>
-void get_large_edges (NumericMatrix xx)
+std::vector<w_edge> get_large_edges (NumericMatrix xx, size_t queue_size)
 {
   class w_edge_greater
   {
@@ -25,7 +25,6 @@ void get_large_edges (NumericMatrix xx)
   
   mutual_info mutual_information = mutual_info();
   
-  const int queue_size = 7;
   fl_priority_queue<w_edge, w_edge_greater> q(queue_size, {0, {0, 0}}); 
   std::vector<w_edge> outvec(queue_size, {0, {0, 0}});
   
@@ -42,13 +41,16 @@ void get_large_edges (NumericMatrix xx)
   }
   
   q.copy_to_vector(&outvec[0]);
-  
-  auto print_element = [] (w_edge e)
-  {
-    std::cout << '(' << e.second.first << ", " << e.second.second << ") ";
-    std::cout << e.first << '\n';
-  };
-  
-  for(auto x : outvec) print_element(x);
+  return(outvec);
   
 }
+
+// [[Rcpp::export]]
+void printedges(NumericMatrix m) {
+  std::vector<w_edge> v =  get_large_edges<gaussian_mutual_information>(m, 8);
+  for(auto x : v) std::cout << x.second.first << "," << x.second.second << "\n"; 
+}
+
+/*** R
+printedges(matrix(rnorm(100), nrow = 20))
+*/
