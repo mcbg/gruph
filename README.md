@@ -20,3 +20,9 @@ I write optimisation suggestions inline, at the moment there are two:
 
 * forest.cpp:11
 * vanilla_kruskal.cpp:16
+
+## read up on 
+
+* [BOOST accumulators]( http://www.boost.org/doc/libs/1_63_0/doc/html/accumulators/user_s_guide.html)
+* [BOOST for each](http://www.boost.org/doc/libs/1_63_0/doc/html/foreach.html)
+* [BOOST graph](http://www.boost.org/doc/libs/1_63_0/libs/graph/doc/index.html)
