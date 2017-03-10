@@ -1,0 +1,27 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+
+\newcommand{\E}{\textbf{E}}
+\newcommand{\N}{\textbf{Norm}}
+
+\setlength\parskip{1em}
+\setlength\parindent{0em}
+
+\begin{document}
+{\Large Mar 2017}
+\section{Tree Theory}
+The mutual information
+$$ I(x,y) = \E \left(\log \frac{ f(x,y) }{ f(x) f(y) }\right), $$
+for a multivariate normal distribution is 
+$$ I_\N(x,y) = - \log( 1 - \rho_{xy}^2),$$
+where $\rho$ is the empirical correlation. We make a tree with the mutual information as weights, so that 
+$$ W(\hat T) = \sum_{ab\in T.E} \left\{ - \log(1 - \hat\rho_{ab}^2 \right)\},$$
+which is equal to the likelihood function, $\hat L(T)$. 
+
+To fit a forest instead, we could penalize the the likelihood function with $\lambda$. Resulting in 
+\begin{align}
+W(\hat F) &= \sum_{ab\in F.E} \left\{ - \log(1 - \hat\rho_{ab}^2) \right\} - \mathrm{\# param}\cdot \lambda \\
+&= \sum_{ab\in F.E} \left\{ - \log(1 - \hat\rho_{ab}^2) - \lambda \right\} 
+\end{align}
+This corresponds to putting a threshold on the mutual information of our edges.
+\end{document}
