@@ -1,50 +1,76 @@
-// [[Rcpp::plugins(cpp11)]]
+#include "forest.h"
 
-#include<vector>
-
-#include "w_edge.cpp"
-#include "set_handler.cpp"
-
-/**
- * You can only insert an edge, if it does not induce a cycle.
- */
-class forest
+bool forest::hascycle(w_edge e)
 {
-  std::set<int> nodes;
-  std::vector<w_edge> edges;
-    
-  bool hascycle(w_edge e)
-  {
-    const int n = edges.size();
-    set_handler<int> s(nodes); // save this somehow?
+  const int n = edges.size();
   
-    for(int i = 0; i < n; ++i) {
-      int x = edges[i].coord.first; 
-      int y = edges[i].coord.second;
-      
-      if (s.get_set(x) == s.get_set(y)) {
-        return true;
-      } else {
-        s.set_union(x, y);
-      }
-    }
+  std::set<int> tmpNodes(nodes);
+  tmpNodes.insert(e.coord.first);
+  tmpNodes.insert(e.coord.second);
+  
+  set_handler<int> s(tmpNodes); // save this somehow?
+  
+  if (edges.size() == 0) {
+    return false;
+  }
+
+  for(int i = 0; i < n; ++i) {
+    int x = edges[i].coord.first; 
+    int y = edges[i].coord.second;
     
-  if (s.get_set(e.coord.first) == s.get_set(e.coord.second))
-        return true;
+    if (s.get_set(x) == s.get_set(y)) {
+      return true;
+    } else {
+      s.set_union(x, y);
+    }
+  }
+    
+  if (s.get_set(e.coord.first) == s.get_set(e.coord.second)) {
+    return true;
+  }
   
   return false;
+}
+
+void forest::add_edge(const w_edge e)
+{
+  if (!hascycle(e)) {
+    edges.push_back(e);
+    nodes.insert(e.coord.first);
+    nodes.insert(e.coord.second);
+  }
+}
+
+
+int forest::n_edges() {
+  return edges.size();
+}
+
+int forest::n_nodes() {
+  return nodes.size();
+}
+
+Rcpp::NumericMatrix forest::get_edges()
+{
+  int n = n_edges();
+  Rcpp::NumericMatrix out(n, 2);
+  
+  for (int i = 0; i < n; ++i) {
+    out(i, 0) = edges[i].coord.first;
+    out(i, 1) = edges[i].coord.second;
   }
   
-public:
-  forest(std::vector<w_edge> pEdges) : edges(pEdges) {};
+  return out;
+}
+
+void forest::print() {
+  for(auto n : nodes)
+    std::cout << n << ' ';
   
-  void add_edge(const w_edge e)
-  {
-    if (!hascycle(e)) {
-      mEdges.push_back(e);
-      nodes.insert(e.coord.first);
-      nodes.insert(e.coord.second);
-    }
+  std::cout << std::endl;
+  
+  for(auto v : edges) {
+    std::cout << v.weight << ' ';
+    std::cout << v.coord.first << ',' << v.coord.second << '\n';
   }
-  
-};
+}
