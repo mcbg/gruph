@@ -9,7 +9,7 @@
 
 \begin{document}
 {\Large Mar 2017}
-\section{Tree Theory}
+\section{Mutual information}
 The mutual information
 $$ I(x,y) = \E \left(\log \frac{ f(x,y) }{ f(x) f(y) }\right), $$
 for a multivariate normal distribution is 
@@ -24,4 +24,22 @@ W(\hat F) &= \sum_{ab\in F.E} \left\{ - \log(1 - \hat\rho_{ab}^2) \right\} - \ma
 &= \sum_{ab\in F.E} \left\{ - \log(1 - \hat\rho_{ab}^2) - \lambda \right\} 
 \end{align}
 This corresponds to putting a threshold on the mutual information of our edges.
+
+\section{Our graphs}
+In general, we will start out with a preliminary graph, $G_0$, which has the 
+edges we want to include in our analysis. This could be 
+
+\begin{itemize}
+\item The full graph---containing all possible edges.
+\item A graph containing all edges above a certain threshold.
+\item A graph containing the $N$ largest edges.
+\end{itemize}
+
+We can impose a structure on this preliminary graph. So we get a new graph, $G_s$, which is for example
+
+\begin{itemize}
+\item a tree
+\item a forest
+\item a chordal graph
+\end{itemize}
 \end{document}
