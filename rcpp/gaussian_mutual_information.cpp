@@ -56,13 +56,13 @@ public:
     k *= sd(xn);
     k *= sd(yn);
     
-    double mutualinfo = 0;
+    double correlation = 0;
     
     for(pairit it(xn.begin(), yn.begin()) ; it.first != xn.end(); ++it.first, ++it.second) {
-      mutualinfo += *it.first *  *it.second;
+      correlation += *it.first *  *it.second;
     }
     
-    mutualinfo /= k;
-    return mutualinfo;
+    correlation /= k;
+    return -1 * std::log(1 - correlation * correlation);
   }
 };

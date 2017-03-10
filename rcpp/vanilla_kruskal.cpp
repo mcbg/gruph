@@ -31,7 +31,7 @@ struct w_edge_greater
 {
   bool operator() (const w_edge lhs, const w_edge rhs)
   {
-    return std::abs(lhs.weight) >  std::abs(rhs.weight);
+    return lhs.weight >  rhs.weight;
   }
 };
 
@@ -57,9 +57,10 @@ NumericMatrix vanilla_kruskal(NumericMatrix m)
 library(igraph)
 library(microbenchmark)
 
-f <- function(n) vanilla_kruskal(matrix(rnorm(n * 880), ncol = n))
+rnorm(100, ncol = 5)
+f <- function(n) vanilla_kruskal(matrix(rnorm(n * 880, 100, 20), ncol = n))
 
-edges <- f(20)
+edges <- f(200)
 class(edges) <- "character"
 g <- graph_from_edgelist(edges)
 plot(g)
