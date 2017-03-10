@@ -8,7 +8,7 @@ bool forest::hascycle(w_edge e)
   tmpNodes.insert(e.coord.first);
   tmpNodes.insert(e.coord.second);
   
-  set_handler<int> s(tmpNodes); // save this somehow?
+  set_handler<int> s(tmpNodes); // TODO: save this somehow, redoing a bunch of work
   
   if (edges.size() == 0) {
     return false;
