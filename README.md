@@ -4,7 +4,8 @@ Fits graphical models using kruskal's algorithm. At the moment it supports
 * Vanilla Kruskal, that starts with all edges.
 
 # Todo
-
+  * https://www.cs.helsinki.fi/u/tpkarkka/alglib/k06/
+  
 ## functionality
 
 * implement thresholding version of algorithm (lambda penalty)
