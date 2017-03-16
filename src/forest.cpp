@@ -1,52 +1,42 @@
 #include "forest.h"
-
-bool forest::hascycle(w_edge e)
+std::set<int> get_nodes(std::vector<w_edge> edges)
 {
-  const int n = edges.size();
+    std::set<int> tmpNode;
   
-  std::set<int> tmpNodes(nodes);
-  tmpNodes.insert(e.coord.first);
-  tmpNodes.insert(e.coord.second);
-  
-  set_handler<int> s(tmpNodes); // TODO: save this somehow, redoing a bunch of work
-  
-  if (edges.size() == 0) {
-    return false;
-  }
-
-  for(int i = 0; i < n; ++i) {
-    int x = edges[i].coord.first; 
-    int y = edges[i].coord.second;
-    
-    if (s.get_set(x) == s.get_set(y)) {
-      return true;
-    } else {
-      s.set_union(x, y);
+    for(auto edge : edges) {
+      tmpNode.insert(edge.coord.first);
+      tmpNode.insert(edge.coord.second);
     }
-  }
     
-  if (s.get_set(e.coord.first) == s.get_set(e.coord.second)) {
-    return true;
-  }
-  
-  return false;
+    return tmpNode;
+}
+
+forest::forest(std::vector<w_edge> edges)
+  :
+  // initiates nodes based on edges
+  nodes(get_nodes(edges)),
+  mSetHandler(nodes) {}
+
+bool forest::has_cycle(w_edge e)
+{
+  return mSetHandler.get_set(e.coord.first) == mSetHandler.get_set(e.coord.second);
 }
 
 void forest::add_edge(const w_edge e)
 {
-  if (!hascycle(e)) {
+  if (!has_cycle(e)) {
     edges.push_back(e);
-    nodes.insert(e.coord.first);
-    nodes.insert(e.coord.second);
+    mSetHandler.set_union(e.coord.first, e.coord.second);
   }
 }
 
-
-int forest::n_edges() {
+int forest::n_edges()
+{
   return edges.size();
 }
 
-int forest::n_nodes() {
+int forest::n_nodes()
+{
   return nodes.size();
 }
 

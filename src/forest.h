@@ -12,14 +12,21 @@
 
 class forest
 {
+  // members
   std::set<int> nodes;
   std::vector<w_edge> edges;
-  bool hascycle(w_edge);
+  set_handler<int> mSetHandler;
+  
+  // private functions
+  bool has_cycle(w_edge);
   
 public:
-  forest(std::vector<w_edge> pEdges) : edges(pEdges) {};
-  forest() {};
+  forest(std::vector<w_edge>);
+  
+  // modifier 
   void add_edge(const w_edge);
+  
+  // observers
   int n_edges();
   int n_nodes();
   Rcpp::NumericMatrix get_edges();

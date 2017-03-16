@@ -4,7 +4,13 @@
 // [[Rcpp::export]]
 void test_forest()
 {
-  forest f;
+  std::vector<w_edge> edges;
+  edges.push_back({0, {0,1}});
+  edges.push_back({0, {1,2}});
+  edges.push_back({0, {3,2}});
+  edges.push_back({0, {0,2}});
+  
+  forest f(edges);
   
   std::cout << "\ninserts valid edges: ";
   f.add_edge({0, {0,1}});
