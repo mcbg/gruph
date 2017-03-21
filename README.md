@@ -15,6 +15,7 @@ Fits graphical models using kruskal's algorithm. At the moment it supports
 ## testing
 * compare vanilla kruskal to `grapHD`. 
 * use boost's testing framework?
+* make sure our algorithm are sort weights in the the right order
 
 ## optimising
 
