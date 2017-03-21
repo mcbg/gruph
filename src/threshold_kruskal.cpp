@@ -42,10 +42,6 @@ NumericMatrix threshold_kruskal(NumericMatrix m, double lambda)
   // step 2: Add edges to forest---edges that induce cycles are rejected.
   forest f(edges);
   
-  for(auto e : edges) {
-    f.add_edge(e);
-  }  // wrong sort?
-  
   return f.get_edges();
 }
   

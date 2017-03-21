@@ -34,30 +34,5 @@ NumericMatrix vanilla_kruskal(NumericMatrix m)
   
   forest f(edges);
   
-  for(auto e : edges) {
-    std::cout << e.weight << ' ';
-    f.add_edge(e);
-    
-  }  // wrong sort?
-  
   return f.get_edges();
 }
-  
-
-/*** R
-library(igraph)
-library(microbenchmark)
-
-N <- 100
-df <-  matrix(rnorm(N * 880), ncol = N)
-15*100/60/24
-microbenchmark(
-  vanilla_kruskal(df)
-)
-
-
-#class(edges) <- "character"
-#g <- graph_from_edgelist(edges, directed = FALSE)
-#plot.igraph(g,layout_as_tree(g), margin = -0.5,
-             #vertex.label = NA, vertex.size = 2.0, edge.arrow.size = 22)
-*/ 

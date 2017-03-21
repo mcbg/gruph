@@ -21,7 +21,7 @@ class forest
   bool has_cycle(w_edge);
   
 public:
-  forest(std::vector<w_edge>);
+  forest(const std::vector<w_edge>);
   
   // modifier 
   void add_edge(const w_edge);

@@ -1,5 +1,6 @@
 #include "forest.h"
-std::set<int> get_nodes(std::vector<w_edge> edges)
+
+std::set<int> get_nodes(const std::vector<w_edge> edges)
 {
     std::set<int> tmpNode;
   
@@ -11,11 +12,17 @@ std::set<int> get_nodes(std::vector<w_edge> edges)
     return tmpNode;
 }
 
-forest::forest(std::vector<w_edge> edges)
+forest::forest(const std::vector<w_edge> edges)
   :
   // initiates nodes based on edges
   nodes(get_nodes(edges)),
-  mSetHandler(nodes) {}
+  // each node starts in its own set
+  mSetHandler(nodes)
+{
+  // insert each edge that doesn't induce cycle
+  for(auto e : edges)
+    add_edge(e);
+}
 
 bool forest::has_cycle(w_edge e)
 {

@@ -34,9 +34,6 @@ NumericMatrix limited_kruskal(NumericMatrix m, int lim)
   
   forest f(edges);
   
-  for(auto e : edges)
-    f.add_edge(e);
-    
   return f.get_edges();
 }
 
