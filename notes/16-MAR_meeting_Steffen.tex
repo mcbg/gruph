@@ -1,0 +1,63 @@
+\documentclass[12pt]{article}
+% 16 03 2017
+
+\usepackage{amsmath}
+
+\newcommand{\E}{\textbf{E}}
+\newcommand{\N}{\textbf{Norm}}
+
+\setlength\parskip{1em}
+\setlength\parindent{0em}
+
+\begin{document}
+{\Large Mar 2017}
+
+\section{Divergence}
+So there a couple of different concepts that relate to our weights:
+
+\begin{itemize}
+  \item Kullback-Leibler divergence
+  \item Mutual information
+  \item Likelihood-ratio testing
+  \item relative entropy
+\end{itemize}
+
+The Kullback-Leibler divergence 
+$$ D_\mathrm{KL}(P, Q) = \sum_i P(i) \log(\frac{P(i)}{Q(i)})$$
+describes the: information gained by using $P$ instead of $Q$; or the relative entropy of $P$ with respect to $Q$.
+
+For a multivariate normal distribution we often consider the divergence, which is the Kullback-Leibler divergence a certain tree and the full model. In our case we can't handle the full model, we we use the $I$-divergence instead---the KL-divergence between our graph and the model where all variables are independent.
+
+\section{information}
+Self-information:
+$$ I(X) = - \log(P(X)) $$
+Entropy:
+$$ H(p) = \E[I(p)] $$
+Cross-entropy:
+$$ H(p,q) = \E_p[-\log q] = H(p) + D_\mathrm{KL}(p, q). $$
+\section{graph weights}
+Our models use the mutual information:
+$$ I(X,Y) = D_\mathrm{KM}(P(X,Y), P(X)P(Y)). $$
+
+chi sq test on tree vs indendent graph.
+
+\section{plotting}
+Once we have sorted our edges with regard to their weight, we can plot the
+graph weight vs number of parameters
+
+\section{specific weights}
+To find the weight between two models we can use a LR-test for independence.
+Note we assume that two groups have the same variance, when comparing normal
+and discreet variables.
+
+\section{Test strength of graph}
+Even for independent models, our method would find a forest. To see how much information our model has, we can use a $\chi ^2$-test between our model, and
+the independent model.
+
+\section{Adding Edges}
+If a tree model holds, the mutual information of two variables should be the 
+sum of edges along the path between them. By comparing the path with the empirical information, we can see which edges we should should add to our graph.
+
+
+\end{document}
+    
