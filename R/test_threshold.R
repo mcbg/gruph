@@ -6,11 +6,8 @@ test_that("function found", {
 })
 
 test_that('', {
-  data("carcass")
   set.seed(123)
-  
   d <- rnorm(100)
   d <- matrix(d, ncol = 5)
-  cor(d)
   threshold_kruskal(d, 0.05) + 1
 })
