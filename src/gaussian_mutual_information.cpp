@@ -43,10 +43,11 @@ double gaussian_mutual_information::operator()(NumericVector x,
   
   double correlation = 0;
   
-  for(pairit it(xn.begin(), yn.begin()) ; it.first != xn.end(); ++it.first, ++it.second) {
+  for(pairit it(xn.begin(), yn.begin());
+      it.first != xn.end();
+      ++it.first, ++it.second) 
     correlation += *it.first *  *it.second;
-}
 
-correlation /= k;
-return -1 * std::log(1 - correlation * correlation);
-  }
+  correlation /= k;
+  return -0.5 * std::log(1 - correlation * correlation);
+}
