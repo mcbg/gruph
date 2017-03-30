@@ -12,6 +12,21 @@ std::set<int> get_nodes(const std::vector<w_edge> edges)
     return tmpNode;
 }
 
+std::vector<w_edge> hi (Rcpp::NumericMatrix edges, Rcpp::NumericVector weight) {
+  std::vector<w_edge> out(edges.nrow());
+  for(int i = 0; i < edges.nrow(); ++i) {
+    out[i].weight = weight(i);
+    out[i].coord.first = edges(i, 0);
+    out[i].coord.second = edges(i, 1);
+  }
+  return out;
+}
+
+forest::forest(const Rcpp::NumericMatrix edges, const Rcpp::NumericVector weights) : 
+  forest(hi(edges, weights))
+{
+}
+
 forest::forest(const std::vector<w_edge> edges)
   :
   // initiates nodes based on edges
@@ -51,12 +66,14 @@ Rcpp::NumericMatrix forest::get_edges()
 {
   int n = n_edges();
   Rcpp::NumericMatrix out(n, 2);
+  Rcpp::NumericVector w(n);
   
   for (int i = 0; i < n; ++i) {
     out(i, 0) = edges[i].coord.first;
     out(i, 1) = edges[i].coord.second;
+    w(i) = edges[i].weight;
   }
-  
+  out.attr("weights") = w;
   return out;
 }
 

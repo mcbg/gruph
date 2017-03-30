@@ -1,0 +1,29 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+
+\newcommand{\E}{\textbf{E}}
+\newcommand{\N}{\textbf{Norm}}
+
+\setlength\parskip{1em}
+\setlength\parindent{0em}
+
+\begin{document}
+{\Large Mar 2017}
+\section{Kullback-Leibler}
+So the Kullback-Leibler divergence is the expected log-likelihood ratio.
+This relates to the likelihood ratio test, which uses the test-statistic
+$$ D = - 2 \log \frac{L_0}{L_a},$$
+which is $\chi^2$-distributed with $df_0 - df_a$ degrees of freedom.
+
+\section{Discrete}
+To test independence of two multinominal variables we use Pearson's $\chi^2$-test. 
+
+https://en.wikipedia.org/wiki/Pearson\%27s\_chi-squared\_test
+
+\section{Mixed}
+To calculate the mutual information between continuous and discrete variables, we use a one-way analysis of variance. This mean calculating a F-test. 
+
+The F-test give a test value, for the independence of the two variables. We still, however, need to find the mutual information.
+
+See \emph{E Hansen 2012, Chapter 12, Introduktion til Matematisk Statistik}.
+\end{document}

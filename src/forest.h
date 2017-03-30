@@ -22,6 +22,7 @@ class forest
   
 public:
   forest(const std::vector<w_edge>);
+  forest(const Rcpp::NumericMatrix, const Rcpp::NumericVector);
   
   // modifier 
   void add_edge(const w_edge);
