@@ -26,4 +26,21 @@ To calculate the mutual information between continuous and discrete variables, w
 The F-test give a test value, for the independence of the two variables. We still, however, need to find the mutual information.
 
 See \emph{E Hansen 2012, Chapter 12, Introduktion til Matematisk Statistik}.
+
+\section{Skype meeting with Steffen}
+One problem I have, is how one earth do I compare continuous-continuous
+mutual information, with continuous-discrete, or discrete-discrete.
+
+Steffen talked about using the p-values for testing independence, these should be uniformly distributed under the null-hypothesis. So we can make something similar to a QQ-plot for our edges.
+
+It's important to keep in mind how many parameters---or degrees-of-freedom--- each mutual information has, so we can penalize correctly. 
+\begin{itemize}
+\item continuous-continous: 1, corresponding to $\rho$ is the covariance matrix.
+\item discrete-discrete: $(|F_x|-1)(|F_y|-1)$
+\item continuous-discrete: (|F_x|-1).
+
+So this allows us to compare weights that are the same type---fx. continuous-discrete. You can compare across types by using the p-value, but I'm not quite sure how to penalize and compare when choosing edges.
+\end{itemize}
+
 \end{document}
+
