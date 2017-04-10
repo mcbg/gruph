@@ -1,3 +1,4 @@
+#include "model.h"
 
 #include <Rcpp.h>
 #include <iostream>
@@ -11,18 +12,13 @@ using namespace Rcpp;
 
 // [[Rcpp::plugins(cpp11)]]
 
-typedef std::vector<double> vecdub;
-typedef std::pair<vecdub::iterator, vecdub::iterator> pairit;
+typedef std::vector<double> vec;
+typedef std::pair<vec::iterator, vec::iterator> pairit;
 
-
-class gaussian_mutual_information
+class gaussian : model
 {
-  double mean(vecdub);
-  void normalize(vecdub &);
-  double sd(vecdub);
-  
 public:  
-  double operator()(NumericVector, NumericVector);
+  double mutual_information(variable, variable);
 };
 
 #endif
