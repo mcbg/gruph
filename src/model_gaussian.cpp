@@ -1,6 +1,6 @@
 // [[Rcpp::plugins(cpp11)]]
 
-#include "gaussian_mutual_information.h"
+#include "model_gaussian.h"
 #include "stats.h"
 #include<vector>
 
