@@ -22,7 +22,20 @@ qplot(pchisq(w * 4, 1, lower.tail = FALSE, log.p = FALSE), geom= "histogram")
 
 - 0.5 * log(1 - cor(x, y)^2)
 attr(cont_threshold_init(matrix(c(x,y), ncol = 2), 0), "weights")
-     
+
+a <- replicate(1000, {
+  x <- rnorm(50)
+  y <- x + rnorm(50)
+  c(- 0.5 * log(1 - cor(x, y)^2),
+    cor(x,y), 
+  t.test(x,y)$statistic  )
+})
+
+qplot(a[2, ], a[3, ]) + xlim(0,1) + ylim(0,1)
+
+f <- function(x) pchisq(x, 1, lower.tail = FALSE)
+qplot(f(a))
+
 attr(cont_threshold_init(matrix(rnorm(50), ncol = 2), 0), "weights")
 qplot(pchisq(x  , 1, lower.tail = FALSE, log.p = FALSE))
 qplot(pchisq(x  , 1, lower.tail = TRUE, log.p = FALSE))
