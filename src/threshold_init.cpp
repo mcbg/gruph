@@ -2,17 +2,23 @@
 
 #include "w_edge.h"
 #include "forest.h"
-#include "gaussian_mutual_information.h"
+#include "model_gaussian.h"
 
 using namespace Rcpp;
 
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::plugins(cpp14)]]
+// [[Rcpp::plugins(cpp11, cpp14)]]
 
-template<class mutual_info>
-struct threshold_edge {
+template<class M>
+class threshold_initializer
+{
   double lambda;
-  std::vector<w_edge> operator()(NumericMatrix data)
+  M ourModel;
+public:
+  threshold_initializer(double l) : lambda(l), ourModel(M(l))
+  {
+  }
+  
+  std::vector<w_edge> initialize(NumericMatrix data)
   {
     std::vector<w_edge> q; // TODO: Initialize this proper
     
@@ -20,7 +26,7 @@ struct threshold_edge {
       NumericVector x = data(_, i);
       for(int j = i + 1; j < data.ncol(); ++j) {
         NumericVector y = data(_, j);
-        w_edge mEdge = {mutual_info()(x, y), {i, j}};
+        w_edge mEdge = {ourModel.mutual_information(x, y), {i, j}};
         if (mEdge.weight > lambda)
           q.push_back(mEdge);
       }
@@ -37,11 +43,10 @@ struct threshold_edge {
 NumericMatrix cont_threshold_init(NumericMatrix m, double lambda)
 {
   // step 0: initate
-  threshold_edge<gaussian_mutual_information> te;
-  te.lambda = lambda;
+  threshold_initializer<gaussian> init(lambda);
   
   // step 1: calculate and sort edges
-  std::vector<w_edge> edges = te(m);
+  std::vector<w_edge> edges = init.initialize(m);
   std::sort(edges.begin(), edges.end(), w_edge_greater());
   
   // convert to R matrix

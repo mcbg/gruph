@@ -15,22 +15,7 @@ double gaussian::mutual_information(variable px, variable py)
   
   // calculate info
   stats_functions<vec> stats;
+  double correlation = stats.cor(x, y);
   
-  stats.normalize(x);
-  stats.normalize(y);
-  
-  // calculate constant k
-  double k = x.size() - 1;
-  k *= stats.sd(x);
-  k *= stats.sd(y);
-  
-  double correlation = 0;
-  
-  for(pairit it(x.begin(), y.begin());
-      it.first != x.end();
-      ++it.first, ++it.second) 
-    correlation += *it.first *  *it.second;
-
-  correlation /= k;
   return -0.5 * std::log(1 - correlation * correlation);
 }

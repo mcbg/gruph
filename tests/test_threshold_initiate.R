@@ -59,4 +59,12 @@ test_that("dimensions", {
   
   expect_equal(ncol(edges), 2)
   expect_equal(nrow(edges), 2)
-})
+  
+  w <- replicate(1000, {
+    xx <- matrix(rnorm(100), ncol = 2)
+    attr(cont_threshold_init(xx, lambda = 0), "weights")
+  })
+  w
+  quantile(100 * w, c(0.2, 0.5,0.8,0.9))
+  qchisq(c(.2,.5,.8, 0.9), 1)
+  })
