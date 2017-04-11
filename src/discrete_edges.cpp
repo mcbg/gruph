@@ -6,6 +6,7 @@
 #include <cmath>
 using namespace Rcpp;
 
+// TODO: REFRACTOR THIS
 typedef std::vector<std::string> string_vec;
 
 class binomial_mutual_information

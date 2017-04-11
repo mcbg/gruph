@@ -1,50 +1,33 @@
+// [[Rcpp::plugins(cpp11)]]
+
 #include "gaussian_mutual_information.h"
+#include "stats.h"
+#include<vector>
 
-double gaussian_mutual_information::mean(vecdub x)
+double gaussian::mutual_information(variable px, variable py)
 {
-    double ourmean = 0;
-    
-    for(auto num : x) 
-      ourmean += num / x.size();
-    
-    return ourmean;
-}
-
-void gaussian_mutual_information::normalize(vecdub &x)
-{ 
-  double m  = mean(x);
+  // set df
+  df = 1;
   
-  for(auto &num : x)
-    num -= m;
-}
-
-double gaussian_mutual_information::sd(vecdub x)
-{
-  double mysd = 0;
-  normalize(x);
-    
-  for(double num : x)
-    mysd += std::pow(num, 2);
+  // convert to std vectors
+  vec x = as<vec>(px);
+  vec y = as<vec>(py);
   
-  mysd /= x.size() - 1;
-  return std::sqrt(mysd);
-}
-
-double gaussian_mutual_information::operator()(NumericVector x,
-                                     NumericVector y) {
-  vecdub xn = as<vecdub>(x);
-  vecdub yn = as<vecdub>(y);
-  normalize(xn);
-  normalize(yn);
+  // calculate info
+  stats_functions<vec> stats;
   
+  stats.normalize(x);
+  stats.normalize(y);
+  
+  // calculate constant k
   double k = x.size() - 1;
-  k *= sd(xn);
-  k *= sd(yn);
+  k *= stats.sd(x);
+  k *= stats.sd(y);
   
   double correlation = 0;
   
-  for(pairit it(xn.begin(), yn.begin());
-      it.first != xn.end();
+  for(pairit it(x.begin(), y.begin());
+      it.first != x.end();
       ++it.first, ++it.second) 
     correlation += *it.first *  *it.second;
 
