@@ -14,10 +14,12 @@ using namespace Rcpp;
 
 typedef std::vector<double> vec;
 
-class gaussian : model
+class gaussian : public model
 {
 public:  
-  gaussian(double l) : model(l) {}
+  gaussian(double l) : model(l) {
+    df = 1;
+  } 
   double mutual_information(variable, variable);
 };
 

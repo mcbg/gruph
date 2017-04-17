@@ -1,4 +1,5 @@
 #include<Rcpp.h>
+#include "w_edge.h"
 
 #ifndef MODEL_H
 #define MODEL_H
@@ -22,6 +23,7 @@ public:
   virtual double mutual_information(variable, variable) = 0;
   double aic(variable, variable); // an information criterium
   double penalized_information(variable, variable);
+  int get_df();
 };
 
 #endif

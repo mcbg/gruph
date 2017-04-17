@@ -1,35 +1,20 @@
-// [[Rcpp::plugins(cpp11)]]
-#include <Rcpp.h>
-#include <vector>
-#include <string>
-#include <iostream>
-#include <cmath>
-using namespace Rcpp;
+#include "model_multivariate.h"
 
-// TODO: REFRACTOR THIS
-typedef std::vector<std::string> string_vec;
-
-class binomial_mutual_information
+std::set<el> multivariate::get_labels(vec x)
 {
-  std::set<std::string> get_labels(string_vec);
-  
-public:  
-  double operator()(string_vec, string_vec);
-};
-
-std::set<std::string> binomial_mutual_information::get_labels(string_vec x)
-{
-  std::set<std::string> setx(x.begin(), x.end());
+  std::set<el> setx(x.begin(), x.end());
   return setx;
 }
 
-double binomial_mutual_information::operator()(string_vec x,
-                                     string_vec y)
+double multivariate::mutual_information(variable px, variable py)
 {
-  std::set<std::string> xlabels = get_labels(x);
-  std::set<std::string> ylabels = get_labels(y);
+  vec x = as<vec>(px);
+  vec y = as<vec>(py);
   
-  double chi_sq_coef = 0;
+  std::set<el> xlabels = get_labels(x);
+  std::set<el> ylabels = get_labels(y);
+  
+  double mutual_info = 0;
   
   // this can be optimised with maps
   for(auto xl : xlabels) {
@@ -49,40 +34,13 @@ double binomial_mutual_information::operator()(string_vec x,
       
       double expected = (xobs * yobs) / x.size();
       std::cout << obs << std::endl;
-      chi_sq_coef += std::pow(obs - expected, 2) / expected;
+      mutual_info += std::pow(obs - expected, 2) / expected;
     }
   }
-  double df = (xlabels.size() - 1) * (ylabels.size() - 1);
+  
+  // SET DF
+  df = (xlabels.size() - 1) * (ylabels.size() - 1);
+  
   // lower tail: false, log: false
-  return R::pchisq(chi_sq_coef, df, false, false);
+  return mutual_info / (2 * x.size());
 }
-
-// [[Rcpp::export]]
-double hi(StringVector x, StringVector y) 
-{
-  string_vec xs = as<string_vec>(x);
-  string_vec ys = as<string_vec>(y);
-  
-  return binomial_mutual_information()(xs, ys);
-}
-
-NumericMatrix discrete_edges(const CharacterMatrix xx)
-{
-  CharacterVector x = xx(_, 0); // smarter way to do this..
-  CharacterVector y = xx(_, 0);
-  
-  for (int i = 0; i < xx.ncol(); ++i) {
-    x = xx(_, i);
-    for (int j = i + 1; j < xx.ncol(); ++j) {
-      y = xx(_, j);
-    
-    }
-  }
-  return NumericMatrix(4, 2);
-}
-/*** R
-microbenchmark::microbenchmark(
-  hi(mtcars$cyl, mtcars$gear),
-  chisq.test(mtcars$cyl, mtcars$gear)
-)
-*/

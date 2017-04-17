@@ -1,0 +1,22 @@
+// [[Rcpp::plugins(cpp11)]]
+
+#include "model.h"
+#include <Rcpp.h>
+#include <vector>
+#include <iostream>
+#include <cmath>
+
+using namespace Rcpp;
+
+typedef double el;
+typedef std::vector<el> vec;
+
+class multivariate : public model
+{
+  std::set<el> get_labels(vec);
+  
+public:  
+  multivariate(double l) : model(l) {}
+  double mutual_information(variable, variable);
+};
+

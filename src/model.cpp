@@ -23,3 +23,8 @@ double model::penalized_information(variable x, variable y)
   info -= lambda * df;
   return info;
 }
+
+int model::get_df()
+{
+  return df;
+}

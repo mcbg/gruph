@@ -5,8 +5,11 @@
 #define EDGE_H
 
 struct w_edge {
+  int i;
+  int j;
   double weight;
-  std::pair<int, int> coord;
+  int df;
+  
 };
 
 struct w_edge_greater 

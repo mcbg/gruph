@@ -6,8 +6,6 @@
 
 double gaussian::mutual_information(variable px, variable py)
 {
-  // set df
-  df = 1;
   
   // convert to std vectors
   vec x = as<vec>(px);
