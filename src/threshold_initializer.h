@@ -31,6 +31,8 @@ public:
       }
       
     }
+    
+    std::sort(q.begin(), q.end(), w_edge_greater());
     return q;
   }
 };

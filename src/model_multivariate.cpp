@@ -23,7 +23,7 @@ double multivariate::mutual_information(variable px, variable py)
       double xobs = 0;
       double yobs = 0;
       
-      for (int i = 0; i < x.size(); ++i) {
+      for (unsigned int i = 0; i < x.size(); ++i) {
         if (y[i] == yl && x[i] == xl)
             ++obs;
         if (y[i] == yl)
@@ -33,7 +33,6 @@ double multivariate::mutual_information(variable px, variable py)
       }
       
       double expected = (xobs * yobs) / x.size();
-      std::cout << obs << std::endl;
       mutual_info += std::pow(obs - expected, 2) / expected;
     }
   }

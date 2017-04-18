@@ -10,21 +10,13 @@ using namespace Rcpp;
 
 // [[Rcpp::plugins(cpp11)]]
 
-
- // [[Rcpp::export]]
-NumericMatrix cont_threshold_init(NumericMatrix m, double lambda)
+void wrap_edges(const std::vector<w_edge> edges, NumericMatrix *out)
 {
-  // step 0: initate
-  threshold_initializer<gaussian> init(lambda);
-  
-  // step 1: calculate and sort edges
-  std::vector<w_edge> edges = init.initialize(m);
-  std::sort(edges.begin(), edges.end(), w_edge_greater());
-  
-  // convert to R matrix, TODO: move this to w_edge
+  /** 
+   * Populates `out` with the contents of `edges`.
+   */
   
   int n = edges.size();
-  NumericMatrix out(n, 2);
   NumericVector weights(n);
   NumericVector df(n);
   
@@ -32,13 +24,38 @@ NumericMatrix cont_threshold_init(NumericMatrix m, double lambda)
     weights[i] = edges[i].weight;
     df[i] = edges[i].df;
     
-    out(i, 0) = edges[i].i + 1;
-    out(i, 1) = edges[i].j + 1;
+    (*out)(i, 0) = edges[i].i + 1;
+    (*out)(i, 1) = edges[i].j + 1;
   }
   
-  out.attr("weights") = weights;
-  out.attr("df") = df;
+  out->attr("weights") = weights;
+  out->attr("df") = df;
+}
+
+template<class M>
+NumericMatrix threshold_init(const NumericMatrix m, const double lambda)
+{
+  // step 0: initate
+  threshold_initializer<M> init(lambda);
+  
+  // step 1: calculate and sort edges
+  std::vector<w_edge> edges = init.initialize(m);
+  
+  // step 2: convert to R matrix
+  NumericMatrix out(edges.size(), 2);
+  wrap_edges(edges, &out);
   
   return out;
 }
+
+ // [[Rcpp::export]]
+NumericMatrix cont_threshold_init(NumericMatrix m, double lambda)
+{
+  return threshold_init<gaussian>(m, lambda);
+}
   
+ // [[Rcpp::export]]
+NumericMatrix discrete_threshold_init(NumericMatrix m, double lambda)
+{
+  return threshold_init<multivariate>(m, lambda);
+}
