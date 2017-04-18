@@ -5,8 +5,8 @@ std::set<int> get_nodes(const std::vector<w_edge> edges)
     std::set<int> tmpNode;
   
     for(auto edge : edges) {
-      tmpNode.insert(edge.coord.first);
-      tmpNode.insert(edge.coord.second);
+      tmpNode.insert(edge.i);
+      tmpNode.insert(edge.j);
     }
     
     return tmpNode;
@@ -16,8 +16,8 @@ std::vector<w_edge> hi (Rcpp::NumericMatrix edges, Rcpp::NumericVector weight) {
   std::vector<w_edge> out(edges.nrow());
   for(int i = 0; i < edges.nrow(); ++i) {
     out[i].weight = weight(i);
-    out[i].coord.first = edges(i, 0);
-    out[i].coord.second = edges(i, 1);
+    out[i].i = edges(i, 0);
+    out[i].j = edges(i, 1);
   }
   return out;
 }
@@ -41,14 +41,14 @@ forest::forest(const std::vector<w_edge> edges)
 
 bool forest::has_cycle(w_edge e)
 {
-  return mSetHandler.get_set(e.coord.first) == mSetHandler.get_set(e.coord.second);
+  return mSetHandler.get_set(e.i) == mSetHandler.get_set(e.j);
 }
 
 void forest::add_edge(const w_edge e)
 {
   if (!has_cycle(e)) {
     edges.push_back(e);
-    mSetHandler.set_union(e.coord.first, e.coord.second);
+    mSetHandler.set_union(e.i, e.j);
   }
 }
 
@@ -69,8 +69,8 @@ Rcpp::NumericMatrix forest::get_edges()
   Rcpp::NumericVector w(n);
   
   for (int i = 0; i < n; ++i) {
-    out(i, 0) = edges[i].coord.first;
-    out(i, 1) = edges[i].coord.second;
+    out(i, 0) = edges[i].i;
+    out(i, 1) = edges[i].j;
     w(i) = edges[i].weight;
   }
   out.attr("weights") = w;
@@ -85,6 +85,6 @@ void forest::print() {
   
   for(auto v : edges) {
     std::cout << v.weight << ' ';
-    std::cout << v.coord.first << ',' << v.coord.second << '\n';
+    std::cout << v.i << ',' << v.j << '\n';
   }
 }
