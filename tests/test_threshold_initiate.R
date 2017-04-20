@@ -24,13 +24,6 @@ test_that("dimensions", {
   expect_equal(nrow(edges), 6)
 })
 
-test_that("elements", {
-  testdata <- iris[, -5]  
-  testdata <- as.matrix(testdata)
-  edges <- cont_threshold_init(testdata, lambda = 0)
-  
-  expect_equal(min(edges), 1)
-})
 
 test_that("weights", {
   testdata <- iris[, -5]  
