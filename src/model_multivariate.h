@@ -13,7 +13,7 @@ typedef std::vector<el> vec;
 
 class multivariate : public model
 {
-  std::set<el> get_labels(vec);
+  std::set<el> get_labels(vec) const;
   
 public:  
   multivariate(double l) : model(l) {}

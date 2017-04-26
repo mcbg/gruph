@@ -1,12 +1,12 @@
 #include "model_multivariate.h"
 
-std::set<el> multivariate::get_labels(vec x)
+std::set<el> multivariate::get_labels(vec x) const
 {
   std::set<el> setx(x.begin(), x.end());
   return setx;
 }
 
-double multivariate::mutual_information(variable px, variable py)
+double multivariate::mutual_information(variable px, variable py) 
 {
   vec x = as<vec>(px);
   vec y = as<vec>(py);
@@ -40,6 +40,5 @@ double multivariate::mutual_information(variable px, variable py)
   // SET DF
   df = (xlabels.size() - 1) * (ylabels.size() - 1);
   
-  // lower tail: false, log: false
   return mutual_info / (2 * x.size());
 }

@@ -23,7 +23,7 @@ public:
   virtual double mutual_information(variable, variable) = 0;
   double aic(variable, variable); // an information criterium
   double penalized_information(variable, variable);
-  int get_df();
+  int get_df() const;
 };
 
 #endif
