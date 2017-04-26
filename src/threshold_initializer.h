@@ -1,22 +1,46 @@
 #include "w_edge.h"
 #include <vector>
 #include <Rcpp.h>
+#include "model.h"
 
 using namespace Rcpp;
 
-template<class M>
-class threshold_initializer
+class threshold_initializer // TODO: new name - graph builder?
 {
-  double lambda;
-  M ourModel;
+  const double lambda;
 public:
-  threshold_initializer(double l) : lambda(l), ourModel(M(l))
+  threshold_initializer(double l) : lambda(l)
   {
   }
   
-  std::vector<w_edge> initialize(const Rcpp::NumericMatrix xx)
+  void add_edges_mixed(const Rcpp::NumericMatrix &xx,
+             const Rcpp::NumericMatrix &yy,
+             int xoffset,
+             int yoffset,
+             model* pModel,
+             std::vector<w_edge> *edges) const
   {
-    std::vector<w_edge> q; // TODO: Initialize this proper
+    
+    for(int i = 0; i < xx.ncol(); ++i) {
+      Rcpp::NumericVector x = xx(_, i);
+      
+      for(int j = 0; j < yy.ncol(); ++j) {
+        Rcpp::NumericVector y = yy(_, j);
+        double w = pModel->mutual_information(x, y);
+        
+        Rcout << "W: " << w << ", lambda: " << lambda <<  std::endl;
+        if (w > lambda) {
+          edges->push_back({i + xoffset, j + yoffset, w, pModel->get_df()});
+        }
+      }
+    }
+  }
+  
+  void add_edges(const Rcpp::NumericMatrix &xx,
+                  int offset,
+                  model* pModel,
+                  std::vector<w_edge> *edges) const
+  {
     int k = xx.ncol();
     
     for(int i = 0; i < k - 1; ++i) {
@@ -24,15 +48,11 @@ public:
       
       for(int j = i + 1; j < k; ++j) {
         Rcpp::NumericVector y = xx(_, j);
-        double w = ourModel.mutual_information(x, y);
+        double w = pModel->mutual_information(x, y);
         
         if (w > lambda)
-          q.push_back({i, j, w, ourModel.get_df()});
+          edges->push_back({i + offset, j + offset, w, pModel->get_df()});
       }
-      
     }
-    
-    std::sort(q.begin(), q.end(), w_edge_greater());
-    return q;
   }
 };
