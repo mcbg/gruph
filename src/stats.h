@@ -5,6 +5,8 @@
 // [[Rcpp::plugins(cpp11)]]
 #include <algorithm>
 #include <cmath>
+#include <Rcpp.h>
+#include <unordered_map>
 
 #ifndef STATS_H
 #define STATS_H
@@ -43,14 +45,21 @@ public:
     return correlation;
   }
   
-  double sd(const T &v) // maximum likelihood??
+  double var(const T &v) // ML
   {
     double mu = mean(v);
     auto f = [mu] (double ourSum, double x) {
       return ourSum + (x - mu) * (x - mu) ;
     };
     double var = std::accumulate(v.begin(), v.end(), 0.0, f);
-    return std::sqrt(var / (v.size() - 1));
+    const int k = v.size(); // ML
+    
+    return (var / k) ;
+  }
+  
+  double sd(const T &v) // maximum likelihood??
+  {
+    return std::sqrt(var(v));
   }
   
   void normalize(T &x)
@@ -62,4 +71,59 @@ public:
   }
 };
 
+template<typename V>
+class testing
+{
+public:
+  double anova_var(const V x, const V y, int *df)
+  {
+    std::unordered_map<double, double> means;
+    std::unordered_map<double, unsigned int> counts;
+    std::unordered_map<double, double> sample_ssd;
+    
+    // 1) calc sums for means and counts
+    for(int i = 0; i < x.size(); ++i) {
+      means[y[i]] += x[i];
+      ++counts[y[i]];
+    }
+    
+    // 2) calc means from sums
+    for (auto &p : means) {
+      p.second /= counts[p.first];
+    }
+    
+    // 3) calculate N * ssd for each sample
+    for(int i = 0; i < x.size(); ++i) {
+      sample_ssd[y[i]] += (x[i] - means[y[i]]) * (x[i] - means[y[i]]);
+    }
+    
+    // 4) calculate ssd
+    double ssd = 0;
+    for (const auto &t : sample_ssd) {
+      // theres no need to times and then divide with the
+      ssd += t.second;
+    }
+    ssd /= x.size();
+    
+    // 5) set df
+    *df = means.size() - 1;
+    
+    return ssd;
+  }
+  
+  double anova_chisq(V x, V y, int *df) 
+  {
+    // step 1) calculate sums and counts
+    stats_functions<V> sf;
+    
+    
+    // step 2) calc. ssd0
+    double ssd0 = sf.var(x) ;
+    
+    // step 3) calc ssd
+    double ssd = anova_var(x, y, df); // changes df
+    
+    return 0.5 * log(ssd0 / ssd);
+ }
+};
 #endif
