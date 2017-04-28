@@ -1,4 +1,5 @@
 #include "model.h"
+#include "stats.h"
 
 #include <unordered_map>
 #include <Rcpp.h>

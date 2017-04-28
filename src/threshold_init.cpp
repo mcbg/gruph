@@ -7,6 +7,7 @@
 
 #include "w_edge.h"
 #include "threshold_initializer.h"
+#include "stats.h"
 
 using namespace Rcpp;
 

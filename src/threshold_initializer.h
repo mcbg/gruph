@@ -28,7 +28,6 @@ public:
         Rcpp::NumericVector y = yy(_, j);
         double w = pModel->mutual_information(x, y);
         
-        Rcout << "W: " << w << ", lambda: " << lambda <<  std::endl;
         if (w > lambda) {
           edges->push_back({i + xoffset, j + yoffset, w, pModel->get_df()});
         }

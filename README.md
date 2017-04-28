@@ -1,10 +1,15 @@
 # gruph
 Fits graphical models using kruskal's algorithm. At the moment it supports
 
-* Vanilla Kruskal, that starts with all edges.
+* calculating raw edges for gaussian, discrete, and mixed cases.
+* setting a threshold
 
 # Todo
-  * https://www.cs.helsinki.fi/u/tpkarkka/alglib/k06/
+
+* get forest stuff to work with new `w_edge`.
+* get working on parellel version.
+
+* write documentation
   
 ## functionality
 
@@ -13,16 +18,10 @@ Fits graphical models using kruskal's algorithm. At the moment it supports
 
 ## testing
 * compare vanilla kruskal to `grapHD`. 
-* use boost's testing framework?
-* make sure our algorithm are sort weights in the the right order
-
-## optimising
-
-I write optimisation suggestions inline, at the moment there are two:
-
-* vanilla_kruskal.cpp:16
 
 ## read up on 
+
+* https://www.cs.helsinki.fi/u/tpkarkka/alglib/k06/
 
 * [BOOST accumulators]( http://www.boost.org/doc/libs/1_63_0/doc/html/accumulators/user_s_guide.html)
 * [BOOST for each](http://www.boost.org/doc/libs/1_63_0/doc/html/foreach.html)
