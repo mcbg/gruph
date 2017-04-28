@@ -31,8 +31,8 @@ public:
     
     // calculate constant k
     double k = x.size() - 1;
-    k *= sd(x);
-    k *= sd(y);
+    k *=  std::sqrt(var_c(x));
+    k *=  std::sqrt(var_c(y));
     
     double correlation = 0;
     
@@ -44,19 +44,33 @@ public:
     correlation /= k;
     return correlation;
   }
-  
-  double var(const T &v) // ML
+
+  double var_c(const T &v) // central
   {
     double mu = mean(v);
-    auto f = [mu] (double ourSum, double x) {
-      return ourSum + (x - mu) * (x - mu) ;
+    auto f = [mu] (double oursum, double x) {
+      return oursum + (x - mu) * (x - mu) ;
     };
     double var = std::accumulate(v.begin(), v.end(), 0.0, f);
-    const int k = v.size(); // ML
+    int k = v.size() - 1; // ml
+    
+    return (var / k) ;
+  }
+
+  
+  double var(const T &v) // ml
+  {
+    double mu = mean(v);
+    auto f = [mu] (double oursum, double x) {
+      return oursum + (x - mu) * (x - mu) ;
+    };
+    double var = std::accumulate(v.begin(), v.end(), 0.0, f);
+    int k = v.size(); // ml
     
     return (var / k) ;
   }
   
+
   double sd(const T &v) // maximum likelihood??
   {
     return std::sqrt(var(v));
