@@ -6,3 +6,6 @@ import(ggplot2)
 
 # exports
 exportPattern('_threshold_init')
+export('max_forest')
+export('weights')
+export('dfs')

@@ -9,6 +9,9 @@ Description: Fits graphical models. Supports gaussian, discrete, and mixed model
 License: GPL (>= 2)
 Imports:
   Rcpp (>= 0.12.9),
-  ggplot2
-LinkingTo: Rcpp
+  ggplot2,
+  BH
+LinkingTo:
+  Rcpp,
+  BH
 SystemRequirements: C++11

@@ -6,11 +6,11 @@ name_edges <- function(edges, xx) {
   out
 }
 
-getdf <- function(edges) {
+dfs <- function(edges) {
  attr(edges, "df") 
 }
 
-getweights <- function(edges) {
+weights <- function(edges) {
  attr(edges, "weights") 
 }
 

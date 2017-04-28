@@ -11,7 +11,6 @@
 #define MIXED_MDL
 
 using namespace Rcpp;
-
 // [[Rcpp::plugins(cpp11)]]
 
 typedef std::vector<double> vec;
