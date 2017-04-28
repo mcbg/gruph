@@ -12,7 +12,7 @@ weight_plot <- function(edges, N) {
   w <- attr(edges, "weights")
   dfs <- attr(edges, "df")
   pvals <- unlist(Map(get_p_value, w, dfs))
-  
+  cat(pvals)
   xx <- data.frame(index = (1:length(pvals))/length(pvals), p = pvals)
   ggplot(aes(x = index, y = p), data = xx) + geom_point() +
     geom_abline(slope = -1, intercept = 1, col = "red", size = 1.2) +

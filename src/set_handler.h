@@ -8,10 +8,12 @@ template<typename T>
 class set_handler
 {
   std::unordered_map<T, int> sets;
-  int group_size = 0;
+  int group_size;
   
 public:
-  set_handler(std::set<T> vs) // add each vertex in v
+  set_handler(std::set<T> vs) :
+    group_size(0)
+  // add each vertex in v
   {
     for(auto v : vs) {
       sets[v] = group_size++;

@@ -1,0 +1,8 @@
+useDynLib(gruph)
+
+# imports
+importFrom(Rcpp, evalCpp)
+import(ggplot2)
+
+# exports
+exportPattern('_threshold_init')

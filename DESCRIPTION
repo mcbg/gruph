@@ -1,0 +1,12 @@
+Package: gruph
+Type: Package
+Title: Fits graphical models. 
+Version: 0.1
+Date: 2017-04-28
+Author: Michael Galanakis
+Maintainer: Michael Galanakis <vhg505@alumni.ku.dk>
+Description: Fits graphical models. Supports gaussian, discrete, and mixed models.  Makes use of a weight matrix, which supports filtering small weights.
+License: GPL (>= 2)
+Imports: Rcpp (>= 0.12.9)
+LinkingTo: Rcpp
+SystemRequirements: C++11
