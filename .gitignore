@@ -9,3 +9,9 @@ gruph.RProj
 .Rhistory
 .RData
 .Ruserdata
+
+# rcpp stuff
+src/RcppExports.cpp
+R/RcppExports.R
+src-i386/*
+src-x64/*
