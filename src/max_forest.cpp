@@ -36,7 +36,7 @@ bool operator>=(inv_double x, inv_double y)
 }
 
 // [[Rcpp::export]]
-void max_forest(NumericMatrix x) {
+NumericVector max_forest(NumericMatrix x) {
   
   typedef std::vector<inv_double> Weights;
   typedef std::pair<int, int> E;
@@ -66,10 +66,18 @@ void max_forest(NumericMatrix x) {
   std::vector< Edge > spanning_forest;
   kruskal_minimum_spanning_tree(g, std::back_inserter(spanning_forest));
   
+  // export
+  NumericMatrix out(spanning_forest.size(), 2);
+  NumericVector out_w(spanning_forest.size());
+  
+  int i = 0;
   for (std::vector < Edge >::iterator ei = spanning_forest.begin();
-       ei != spanning_forest.end(); ++ei) {
-    std::cout << source(*ei, g) << " <--> " << target(*ei, g)
-              << " with weight of " << get(edge_weight, g, *ei).x
-              << std::endl;
+       ei != spanning_forest.end();
+       ++ei, ++i) {
+    out(i, 0) = source(*ei, g);
+    out(i, 1) = target(*ei, g);
+    out_w(i) = get(edge_weight, g, *ei).x;
   }
+  out.attr("weights") = out_w;
+  return out;
 }
