@@ -13,16 +13,17 @@ sim_plot <- function(N, M, M2, no_labels) {
   colnames(disc) <- (1:M2) + M
   
   edges <- mixed_threshold_init( cont, disc, 0)
-  weight_plot(edges, N)
+  cat("edges done..")
+  #weight_plot(edges, N)
   weight_histogram(edges, N, FALSE)
 # return(edges)
 }
 
+sim_plot(100, 150, 100, 2) 
 sim_plot(100, 20, 20, 2) 
 sim_plot(100, 20, 20, 3) 
 sim_plot(100, 20, 20, 4) 
-sim_plot(100, 20, 20, 5) 
-
+sim_plot(100, 20, 20, 5)  
 sim_plot(100, 2, 20, 5) 
 sim_plot(100, 20, 2, 5) 
 

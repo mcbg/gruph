@@ -12,6 +12,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::plugins(cpp11)]]
+// [[Rcpp::depends(BH)]]
 
 void wrap_edges(const std::vector<w_edge> edges,
                 const CharacterVector colnames,
@@ -25,17 +26,20 @@ void wrap_edges(const std::vector<w_edge> edges,
   NumericVector weights(n);
   NumericVector df(n);
   
+  boost::progress_display loading_bar(n);
   for (int i = 0; i < n; ++i) {
     weights[i] = edges[i].weight;
     df[i] = edges[i].df;
     
     auto node_style = [edges, colnames] (int i, bool is_first) {
       int k = is_first ? edges[i].i : edges[i].j;
-      return colnames[k];
+      //return colnames[k];
+      return k++;
     };
     
     (*out)(i, 0) = node_style(i, true);
     (*out)(i, 1) = node_style(i, false);
+    ++loading_bar;
   }
   
   out->attr("weights") = weights;
@@ -118,8 +122,11 @@ CharacterMatrix mixed_threshold_init(NumericMatrix x,
   multivariate disc(lambda);
   mixed mix(lambda);
   
+  Rcout << "Calculating gaussian edges.." << std::endl;
   builder.add_edges(x, 0, &gauss, &edges);
+  Rcout << "\nCalculating discrete edges.." << std::endl;
   builder.add_edges(y, index_offset, &disc, &edges);
+  Rcout << "\nCalculating mixed edges.." << std::endl;
   builder.add_edges_mixed(x, y, 0, index_offset, &mix, &edges);
   
   // step 2) sort
@@ -127,6 +134,8 @@ CharacterMatrix mixed_threshold_init(NumericMatrix x,
   
   // step 3) make r friendly
   CharacterMatrix out(edges.size(), 2);
+  
+  Rcout << "\nConverting to R objects.." << std::endl;
   wrap_edges(edges, newNames, &out);
   
   return out;

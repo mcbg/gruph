@@ -6,9 +6,9 @@ Fits graphical models using kruskal's algorithm. At the moment it supports
 
 # Todo
 
-* get forest stuff to work with new `w_edge`.
-* get working on parellel version.
+* make secure with Principals and mechanisms  https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=637  
 
+* get working on parellel version.
 * write documentation
   
 ## functionality

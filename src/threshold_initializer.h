@@ -1,7 +1,11 @@
 #include "w_edge.h"
+#include "model.h"
+
 #include <vector>
 #include <Rcpp.h>
-#include "model.h"
+#include <boost/progress.hpp>
+
+// [[Rcpp::depends(BH)]]
 
 using namespace Rcpp;
 
@@ -20,7 +24,8 @@ public:
              model* pModel,
              std::vector<w_edge> *edges) const
   {
-    
+    const int computations = xx.ncol() * yy.ncol();
+    boost::progress_display loading_bar(computations);
     for(int i = 0; i < xx.ncol(); ++i) {
       Rcpp::NumericVector x = xx(_, i);
       
@@ -31,6 +36,8 @@ public:
         if (w > lambda) {
           edges->push_back({i + xoffset, j + yoffset, w, pModel->get_df()});
         }
+        
+        ++loading_bar;
       }
     }
   }
@@ -40,7 +47,10 @@ public:
                   model* pModel,
                   std::vector<w_edge> *edges) const
   {
-    int k = xx.ncol();
+    const int k = xx.ncol();
+    const int computations = k * k / 2;
+    
+    boost::progress_display loading_bar(computations);
     
     for(int i = 0; i < k - 1; ++i) {
       Rcpp::NumericVector x = xx(_, i);
@@ -51,6 +61,7 @@ public:
         
         if (w > lambda)
           edges->push_back({i + offset, j + offset, w, pModel->get_df()});
+        ++loading_bar;
       }
     }
   }
