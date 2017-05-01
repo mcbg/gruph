@@ -14,6 +14,7 @@ struct inv_double
 {
     //just inverts `operator<` so to find maximum forest
     double x;
+    int df;
 };
 
 bool operator>(inv_double x, inv_double y) {
@@ -44,6 +45,7 @@ NumericVector max_forest(NumericMatrix x) {
   
   size_t num_nodes = x.ncol();
   NumericVector w = x.attr("weights");
+  NumericVector df = x.attr("df");
   
   // CONVERT TO CPP OBJECTS
   edges mEdges(x.nrow(), {-1, -1});
@@ -53,6 +55,7 @@ NumericVector max_forest(NumericMatrix x) {
     mEdges[i].first = x(i,0);
     mEdges[i].second = x(i,1);
     weights[i].x = w(i);
+    weights[i].df = df(i);
   }
   
   
@@ -69,6 +72,7 @@ NumericVector max_forest(NumericMatrix x) {
   // export
   NumericMatrix out(spanning_forest.size(), 2);
   NumericVector out_w(spanning_forest.size());
+  NumericVector out_df(spanning_forest.size());
   
   int i = 0;
   for (std::vector < Edge >::iterator ei = spanning_forest.begin();
@@ -77,7 +81,15 @@ NumericVector max_forest(NumericMatrix x) {
     out(i, 0) = source(*ei, g);
     out(i, 1) = target(*ei, g);
     out_w(i) = get(edge_weight, g, *ei).x;
+    out_df(i) = get(edge_weight, g, *ei).df;
   }
   out.attr("weights") = out_w;
+  out.attr("df") = out_df;
   return out;
+}
+
+// [[Rcpp::export]]
+NumericVector max_forest_c(CharacterMatrix x) {
+  NumericMatrix y = as<NumericMatrix>(x);
+  return max_forest(y);
 }
