@@ -25,16 +25,18 @@ public:
              std::vector<w_edge> *edges) const
   {
     const int computations = xx.ncol() * yy.ncol();
-    boost::progress_display loading_bar(computations);
+    boost::progress_display loading_bar(computations, Rcout);
+    
     for(int i = 0; i < xx.ncol(); ++i) {
       Rcpp::NumericVector x = xx(_, i);
       
       for(int j = 0; j < yy.ncol(); ++j) {
         Rcpp::NumericVector y = yy(_, j);
         double w = pModel->mutual_information(x, y);
+        int df = pModel->get_df();
         
-        if (w > lambda) {
-          edges->push_back({i + xoffset, j + yoffset, w, pModel->get_df()});
+        if (w > lambda * df) {
+          edges->push_back({i + xoffset, j + yoffset, w, df});
         }
         
         ++loading_bar;
@@ -50,7 +52,7 @@ public:
     const int k = xx.ncol();
     const int computations = k * k / 2;
     
-    boost::progress_display loading_bar(computations);
+    boost::progress_display loading_bar(computations, Rcout);
     
     for(int i = 0; i < k - 1; ++i) {
       Rcpp::NumericVector x = xx(_, i);
