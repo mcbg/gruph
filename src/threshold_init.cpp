@@ -16,7 +16,7 @@ using namespace Rcpp;
 
 void wrap_edges(const std::vector<w_edge> edges,
                 const CharacterVector colnames,
-                CharacterMatrix *out)
+                NumericMatrix *out)
 {
   /** 
    * Populates `out` with the contents of `edges`.
@@ -26,19 +26,21 @@ void wrap_edges(const std::vector<w_edge> edges,
   NumericVector weights(n);
   NumericVector df(n);
   
+  auto node_style = [edges, colnames] (int i, bool is_first) {
+    int k = is_first ? edges[i].i : edges[i].j;
+    //return colnames[k];
+    return k++;
+  };
+  
   boost::progress_display loading_bar(n);
   for (int i = 0; i < n; ++i) {
     weights[i] = edges[i].weight;
     df[i] = edges[i].df;
     
-    auto node_style = [edges, colnames] (int i, bool is_first) {
-      int k = is_first ? edges[i].i : edges[i].j;
-      //return colnames[k];
-      return k++;
-    };
     
     (*out)(i, 0) = node_style(i, true);
     (*out)(i, 1) = node_style(i, false);
+    
     ++loading_bar;
   }
   
@@ -48,7 +50,7 @@ void wrap_edges(const std::vector<w_edge> edges,
 }
 
 template<class M>
-CharacterMatrix threshold_init(const NumericMatrix &x,
+NumericMatrix threshold_init(const NumericMatrix &x,
                                const double lambda)
 {
   // step 0: initate initializer and colnames
@@ -76,7 +78,7 @@ CharacterMatrix threshold_init(const NumericMatrix &x,
   std::sort(edges.begin(), edges.end(), w_edge_greater());
   
   // step 3: convert to R matrix
-  CharacterMatrix out(edges.size(), 2);
+  NumericMatrix out(edges.size(), 2);
   wrap_edges(edges, xNames, &out);
   
   return out;
@@ -92,20 +94,20 @@ CharacterVector concat(strvec x, strvec y)
 }
 
  // [[Rcpp::export]]
-CharacterMatrix cont_threshold_init(NumericMatrix m, double lambda)
+NumericMatrix cont_threshold_init(NumericMatrix m, double lambda)
 {
   return threshold_init<gaussian>(m, lambda);
 }
   
  // [[Rcpp::export]]
-CharacterMatrix discrete_threshold_init(NumericMatrix m, double lambda)
+NumericMatrix discrete_threshold_init(NumericMatrix m, double lambda)
 {
   return threshold_init<multivariate>(m, lambda);
 }
 
 
  // [[Rcpp::export]]
-CharacterMatrix mixed_threshold_init(NumericMatrix x,
+NumericMatrix mixed_threshold_init(NumericMatrix x,
                                         NumericMatrix y,
                                         double lambda)
 {
@@ -114,6 +116,7 @@ CharacterMatrix mixed_threshold_init(NumericMatrix x,
   const CharacterVector xNames = VECTOR_ELT(x.attr("dimnames"), 1);
   const CharacterVector yNames = VECTOR_ELT(y.attr("dimnames"), 1);
   const CharacterVector newNames = concat(as<strvec>(xNames), as<strvec>(yNames));
+  
   threshold_initializer builder(lambda);
   std::vector<w_edge> edges;
   
@@ -133,7 +136,7 @@ CharacterMatrix mixed_threshold_init(NumericMatrix x,
   std::sort(edges.begin(), edges.end(), w_edge_greater());
   
   // step 3) make r friendly
-  CharacterMatrix out(edges.size(), 2);
+  NumericMatrix out(edges.size(), 2);
   
   Rcout << "\nConverting to R objects.." << std::endl;
   wrap_edges(edges, newNames, &out);
