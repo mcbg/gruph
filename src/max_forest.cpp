@@ -85,6 +85,8 @@ NumericVector max_forest(NumericMatrix x) {
   }
   out.attr("weights") = out_w;
   out.attr("df") = out_df;
+  out.attr("columns") = x.attr("columns");
+  
   return out;
 }
 

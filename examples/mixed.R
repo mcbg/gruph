@@ -15,14 +15,12 @@ mktest <- function(N, M, M2, no_labels) {
 }
 
 sim <- function(N, M, M2, no_labels, lambda = 0) {
-  cat(Sys.time(),  "\n")
   cont <- replicate(M, { rnorm(N) })
   colnames(cont) <- as.character(1:M)
   disc <- replicate(M2 , { gen_disc_col(N, no_labels) })
   colnames(disc) <- (1:M2) + M
   
   edges <- mixed_threshold_init( cont, disc, lambda)
-  cat(Sys.time(),  "\n")
   edges
 }
 
