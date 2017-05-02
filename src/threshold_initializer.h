@@ -24,7 +24,7 @@ public:
              model* pModel,
              std::vector<w_edge> *edges) const
   {
-    const int computations = xx.ncol() * yy.ncol();
+    const size_t computations = size_t(xx.ncol()) * size_t(yy.ncol());
     boost::progress_display loading_bar(computations, Rcout);
     
     for(int i = 0; i < xx.ncol(); ++i) {
@@ -49,15 +49,15 @@ public:
                   model* pModel,
                   std::vector<w_edge> *edges) const
   {
-    const int k = xx.ncol();
-    const int computations = k * k / 2;
+    const size_t k = xx.ncol();
+    const size_t computations = k * k / 2;
     
     boost::progress_display loading_bar(computations, Rcout);
     
-    for(int i = 0; i < k - 1; ++i) {
+    for(size_t i = 0; i < k - 1; ++i) {
       Rcpp::NumericVector x = xx(_, i);
       
-      for(int j = i + 1; j < k; ++j) {
+      for(size_t j = i + 1; j < k; ++j) {
         Rcpp::NumericVector y = xx(_, j);
         double w = pModel->mutual_information(x, y);
         

@@ -57,7 +57,7 @@ NumericMatrix threshold_init(const NumericMatrix &x,
   
   std::vector<w_edge> edges; 
   threshold_initializer init(lambda);
-  model *mModel = new M(lambda);
+  M mModel = M(lambda);
   
   auto gen_colnames = [] (int n) {
     CharacterVector x(n);
@@ -72,12 +72,11 @@ NumericMatrix threshold_init(const NumericMatrix &x,
       gen_colnames(x.ncol());
   
   // step 1: calculate and sort edges
-  init.add_edges(x, 0, mModel, &edges);
+  Rcout << "Calculating edges.." << std::endl;
+  init.add_edges(x, 0, &mModel, &edges);
   
-  // step 2: sort
-  std::sort(edges.begin(), edges.end(), w_edge_greater());
-  
-  // step 3: convert to R matrix
+  // step 2: convert to R matrix
+  Rcout << "Converting to R object.." << std::endl;
   NumericMatrix out(edges.size(), 2);
   wrap_edges(edges, xNames, &out);
   
