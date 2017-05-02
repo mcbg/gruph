@@ -7,19 +7,26 @@ Fits graphical models using kruskal's algorithm. At the moment it supports
 # Todo
 
 * make secure with Principals and mechanisms  https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=637  
-
 * get working on parellel version.
 * write documentation
+
+## assertions
+
+* make test for column assertion
+* handle NA NaN and Inf
+* test that discrete elements aren't unique!
+* make tests for the above
+
   
-## functionality
+# functionality
 
 * make return value have `R` entries (just plus one)
 * refracture so our kruskal function has an external policy for making our list of edges. This will make our implementation much more flexible!
 
-## testing
+# testing
 * compare vanilla kruskal to `grapHD`. 
 
-## read up on 
+# read up on 
 
 * [Pretty code with iterators](https://stackoverflow.com/questions/11686815/custom-inserter-for-stdcopy?noredirect=1&lq=1)
 * https://www.cs.helsinki.fi/u/tpkarkka/alglib/k06/

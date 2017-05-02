@@ -112,7 +112,9 @@ NumericMatrix mixed_threshold_init(NumericMatrix x,
                                         double lambda)
 {
   const int index_offset  = x.ncol(); // size of x
-  
+  if (x.nrow() != y.nrow())
+    stop("Rows don't match!");
+
   const CharacterVector xNames = VECTOR_ELT(x.attr("dimnames"), 1);
   const CharacterVector yNames = VECTOR_ELT(y.attr("dimnames"), 1);
   const CharacterVector newNames = concat(as<strvec>(xNames), as<strvec>(yNames));
