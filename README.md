@@ -12,6 +12,7 @@ Fits graphical models using kruskal's algorithm. At the moment it supports
 
 ## assertions
 
+* change ints to size_t
 * make test for column assertion
 * handle NA NaN and Inf
 * test that discrete elements aren't unique!
@@ -20,8 +21,9 @@ Fits graphical models using kruskal's algorithm. At the moment it supports
   
 # functionality
 
-* make return value have `R` entries (just plus one)
-* refracture so our kruskal function has an external policy for making our list of edges. This will make our implementation much more flexible!
+* add model for degenerate gaussian
+* parallel 
+* refacture threshold_init and  threshold_initializer
 
 # testing
 * compare vanilla kruskal to `grapHD`. 
