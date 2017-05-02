@@ -21,6 +21,7 @@ Fits graphical models using kruskal's algorithm. At the moment it supports
 
 ## read up on 
 
+* [Pretty code with iterators](https://stackoverflow.com/questions/11686815/custom-inserter-for-stdcopy?noredirect=1&lq=1)
 * https://www.cs.helsinki.fi/u/tpkarkka/alglib/k06/
 
 * [BOOST accumulators]( http://www.boost.org/doc/libs/1_63_0/doc/html/accumulators/user_s_guide.html)
