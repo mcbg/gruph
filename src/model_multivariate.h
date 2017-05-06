@@ -1,4 +1,6 @@
 // [[Rcpp::plugins(cpp11)]]
+#ifndef MULT_MDL
+#define MULT_MDL
 
 #include "model.h"
 #include <Rcpp.h>
@@ -20,3 +22,4 @@ public:
   double mutual_information(variable, variable);
 };
 
+#endif

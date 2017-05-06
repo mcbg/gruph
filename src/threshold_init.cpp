@@ -4,6 +4,7 @@
 #include "model_gaussian.h"
 #include "model_multivariate.h"
 #include "model_mixed.h"
+#include "model_gaussian_degenerate_zero.h"
 
 #include "w_edge.h"
 #include "threshold_initializer.h"
@@ -104,6 +105,12 @@ NumericMatrix discrete_threshold_init(NumericMatrix m, double lambda)
   return threshold_init<multivariate>(m, lambda);
 }
 
+// [[Rcpp::export]]
+double hi(NumericVector x, NumericVector y)
+{
+  gaussian_degenerate_zero mdl(0);
+  return mdl.mutual_information(x, y);
+}
 
  // [[Rcpp::export]]
 NumericMatrix mixed_threshold_init(NumericMatrix x,

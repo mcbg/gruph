@@ -5,10 +5,10 @@
 #define EDGE_H
 
 struct w_edge {
-  int i;
-  int j;
+  size_t i;
+  size_t j;
   double weight;
-  int df;
+  size_t df;
   
 };
 

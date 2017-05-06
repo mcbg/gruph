@@ -24,16 +24,18 @@ public:
              model* pModel,
              std::vector<w_edge> *edges) const
   {
+    const unsigned int xcols = xx.ncol();
+    const unsigned int ycols = yy.ncol();
     const size_t computations = size_t(xx.ncol()) * size_t(yy.ncol());
     boost::progress_display loading_bar(computations, Rcout);
     
-    for(int i = 0; i < xx.ncol(); ++i) {
+    for(size_t i = 0; i < xcols; ++i) {
       Rcpp::NumericVector x = xx(_, i);
       
-      for(int j = 0; j < yy.ncol(); ++j) {
+      for(size_t j = 0; j < ycols; ++j) {
         Rcpp::NumericVector y = yy(_, j);
         double w = pModel->mutual_information(x, y);
-        int df = pModel->get_df();
+        size_t df = pModel->get_df();
         
         if (w > lambda * df) {
           edges->push_back({i + xoffset, j + yoffset, w, df});
