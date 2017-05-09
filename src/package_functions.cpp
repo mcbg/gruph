@@ -7,48 +7,17 @@
 #include "model_gaussian_degenerate_zero.h"
 
 #include "w_edge.h"
+#include "wrapper.h"
 #include "threshold_initializer.h"
 #include "stats.h"
 
 using namespace Rcpp;
 
+// TODO: change names to cinit dinit minit
+
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(BH)]]
 
-void wrap_edges(const std::vector<w_edge> edges,
-                const CharacterVector colnames,
-                NumericMatrix *out)
-{
-  /** 
-   * Populates `out` with the contents of `edges`.
-   */
-  
-  int n = edges.size();
-  NumericVector weights(n);
-  NumericVector df(n);
-  
-  auto node_style = [edges, colnames] (int i, bool is_first) {
-    int k = is_first ? edges[i].i : edges[i].j;
-    //return colnames[k];
-    return k++;
-  };
-  
-  boost::progress_display loading_bar(n);
-  for (int i = 0; i < n; ++i) {
-    weights[i] = edges[i].weight;
-    df[i] = edges[i].df;
-    
-    
-    (*out)(i, 0) = node_style(i, true);
-    (*out)(i, 1) = node_style(i, false);
-    
-    ++loading_bar;
-  }
-  
-  out->attr("weights") = weights;
-  out->attr("df") = df;
-  out->attr("columns") = colnames;
-}
 
 template<class M>
 NumericMatrix threshold_init(const NumericMatrix &x,
@@ -79,7 +48,8 @@ NumericMatrix threshold_init(const NumericMatrix &x,
   // step 2: convert to R matrix
   Rcout << "Converting to R object.." << std::endl;
   NumericMatrix out(edges.size(), 2);
-  wrap_edges(edges, xNames, &out);
+  wrapper w;
+  w(edges, xNames, &out);
   
   return out;
 }
@@ -147,7 +117,8 @@ NumericMatrix mixed_threshold_init(NumericMatrix x,
   NumericMatrix out(edges.size(), 2);
   
   Rcout << "\nConverting to R objects.." << std::endl;
-  wrap_edges(edges, newNames, &out);
+  wrapper w;
+  w(edges, newNames, &out);
   
   return out;
 }

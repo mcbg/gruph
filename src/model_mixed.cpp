@@ -1,6 +1,7 @@
 // [[Rcpp::plugins(cpp11)]]
 
 #include "model_mixed.h"
+#include "stats.h"
 
 double mixed::mutual_information(variable x, variable y)
 {

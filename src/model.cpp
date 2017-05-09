@@ -24,7 +24,7 @@ double model::penalized_information(variable x, variable y)
   return info;
 }
 
-int model::get_df() const
+size_t model::get_df() const
 {
   return df;
 }

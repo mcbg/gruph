@@ -89,7 +89,7 @@ template<typename V>
 class testing
 {
 public:
-  double anova_var(const V x, const V y, int *df)
+  double anova_var(const V &x, const V &y, size_t *df)
   {
     std::unordered_map<double, double> means;
     std::unordered_map<double, unsigned int> counts;
@@ -125,7 +125,7 @@ public:
     return ssd;
   }
   
-  double anova_chisq(V x, V y, int *df) 
+  double anova_chisq(V x, V y, size_t *df) 
   {
     // step 1) calculate sums and counts
     stats_functions<V> sf;
