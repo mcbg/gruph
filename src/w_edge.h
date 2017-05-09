@@ -1,14 +1,17 @@
 #include<utility>
 #include<cmath>
+#include<Rcpp.h>
 
 #ifndef EDGE_H
 #define EDGE_H
 
+typedef int64_t our_int;
+
 struct w_edge {
-  size_t i;
-  size_t j;
+  our_int i;
+  our_int j;
   double weight;
-  size_t df;
+  our_int df;
   
 };
 
