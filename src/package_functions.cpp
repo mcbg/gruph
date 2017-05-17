@@ -17,6 +17,8 @@ using namespace Rcpp;
 // [[Rcpp::depends(BH)]]
 
 
+typedef std::vector<std::string> strvec;
+
 template<class M>
 NumericMatrix generic_init(const NumericMatrix &x,
                                const double lambda, const bool silent)
@@ -52,14 +54,6 @@ NumericMatrix generic_init(const NumericMatrix &x,
   return out;
 }
   
-typedef std::vector<std::string> strvec;
-CharacterVector concat(strvec x, strvec y)
-{
-  strvec z(x.size() + y.size());
-  std::copy(x.begin(), x.end(), z.begin());
-  std::copy(y.begin(), y.end(), z.begin() + x.size());
-  return wrap(z);
-}
 
  // [[Rcpp::export]]
 NumericMatrix cinit(NumericMatrix m, double lambda, const bool silent)
@@ -84,13 +78,27 @@ NumericMatrix minit(NumericMatrix x,
                     NumericMatrix y,
                     double lambda, bool silent)
 {
+  
+  struct string_handler
+  {
+    // todo: move to wrapper?
+    CharacterVector concat(strvec x, strvec y)
+    {
+      strvec z(x.size() + y.size());
+      std::copy(x.begin(), x.end(), z.begin());
+      std::copy(y.begin(), y.end(), z.begin() + x.size());
+      return wrap(z);
+    }
+  };
+  
+  string_handler sh;
   const int index_offset  = x.ncol(); // size of x
   if (x.nrow() != y.nrow())
     stop("Rows don't match!");
 
   const CharacterVector xNames = VECTOR_ELT(x.attr("dimnames"), 1);
   const CharacterVector yNames = VECTOR_ELT(y.attr("dimnames"), 1);
-  const CharacterVector newNames = concat(as<strvec>(xNames),
+  const CharacterVector newNames = sh.concat(as<strvec>(xNames),
     as<strvec>(yNames));
   
   graph_builder builder(lambda, silent);
