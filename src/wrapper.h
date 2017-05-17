@@ -1,6 +1,5 @@
 // [[Rcpp::depends(BH)]]
 #include<Rcpp.h>
-#include<boost/progress.hpp>
 using namespace Rcpp;
 
 
@@ -29,7 +28,6 @@ struct wrapper
       return k++;
     };
     
-    boost::progress_display loading_bar(n);
     for (int i = 0; i < n; ++i) {
       weights[i] = edges[i].weight;
       df[i] = edges[i].df;
@@ -38,7 +36,6 @@ struct wrapper
       (*out)(i, 0) = node_style(i, true);
       (*out)(i, 1) = node_style(i, false);
       
-      ++loading_bar;
     }
     
     out->attr("weights") = weights;
