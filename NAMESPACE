@@ -5,7 +5,11 @@ importFrom(Rcpp, evalCpp)
 import(ggplot2)
 
 # exports
-exportPattern('_threshold_init')
+export('cinit')
+export('dinit')
+export('minit')
+export('dginit')
+
 export('max_forest')
 export('weights')
 export('dfs')

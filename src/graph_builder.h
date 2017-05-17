@@ -9,11 +9,15 @@
 
 using namespace Rcpp;
 
-class threshold_initializer // TODO: new name - graph builder?
+class graph_builder // TODO: new name - graph builder?
 {
   const double lambda;
+  const bool silent;
 public:
-  threshold_initializer(double l) : lambda(l)
+  graph_builder(double l, bool s) : lambda(l), silent(s)
+  {
+  }
+  graph_builder(double l) : lambda(l), silent(true)
   {
   }
   
@@ -27,7 +31,8 @@ public:
     const unsigned int xcols = xx.ncol();
     const unsigned int ycols = yy.ncol();
     const size_t computations = size_t(xx.ncol()) * size_t(yy.ncol());
-    boost::progress_display loading_bar(computations, Rcout);
+
+    //boost::progress_display loading_bar(computations, nullptr);
     
     for(size_t i = 0; i < xcols; ++i) {
       Rcpp::NumericVector x = xx(_, i);
@@ -41,7 +46,8 @@ public:
           edges->push_back({i + xoffset, j + yoffset, w, df});
         }
         
-        ++loading_bar;
+      //  if (!silent)
+      //     ++loading_bar;
       }
     }
   }
@@ -54,7 +60,7 @@ public:
     const size_t k = xx.ncol();
     const size_t computations = k * k / 2;
     
-    boost::progress_display loading_bar(computations, Rcout);
+    //boost::progress_display loading_bar(computations, nullptr);
     
     for(size_t i = 0; i < k - 1; ++i) {
       Rcpp::NumericVector x = xx(_, i);
@@ -65,7 +71,7 @@ public:
         
         if (w > lambda)
           edges->push_back({i + offset, j + offset, w, pModel->get_df()});
-        ++loading_bar;
+     //   ++loading_bar;
       }
     }
   }

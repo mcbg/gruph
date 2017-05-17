@@ -8,25 +8,23 @@
 
 #include "w_edge.h"
 #include "wrapper.h"
-#include "threshold_initializer.h"
+#include "graph_builder.h"
 #include "stats.h"
 
 using namespace Rcpp;
-
-// TODO: change names to cinit dinit minit
 
 // [[Rcpp::plugins(cpp11)]]
 // [[Rcpp::depends(BH)]]
 
 
 template<class M>
-NumericMatrix threshold_init(const NumericMatrix &x,
-                               const double lambda)
+NumericMatrix generic_init(const NumericMatrix &x,
+                               const double lambda, const bool silent)
 {
   // step 0: initate initializer and colnames
   
   std::vector<w_edge> edges; 
-  threshold_initializer init(lambda);
+  graph_builder init(lambda, silent);
   M mModel = M(lambda);
   
   auto gen_colnames = [] (int n) {
@@ -42,11 +40,11 @@ NumericMatrix threshold_init(const NumericMatrix &x,
       gen_colnames(x.ncol());
   
   // step 1: calculate and sort edges
-  Rcout << "Calculating edges.." << std::endl;
+  //Rcout << "Calculating edges.." << std::endl;
   init.add_edges(x, 0, &mModel, &edges);
   
   // step 2: convert to R matrix
-  Rcout << "Converting to R object.." << std::endl;
+  //Rcout << "Converting to R object.." << std::endl;
   NumericMatrix out(edges.size(), 2);
   wrapper w;
   w(edges, xNames, &out);
@@ -64,28 +62,27 @@ CharacterVector concat(strvec x, strvec y)
 }
 
  // [[Rcpp::export]]
-NumericMatrix cont_threshold_init(NumericMatrix m, double lambda)
+NumericMatrix cinit(NumericMatrix m, double lambda, const bool silent)
 {
-  return threshold_init<gaussian>(m, lambda);
+  return generic_init<gaussian>(m, lambda, silent);
 }
   
  // [[Rcpp::export]]
-NumericMatrix discrete_threshold_init(NumericMatrix m, double lambda)
+NumericMatrix dinit(NumericMatrix m, double lambda, const bool silent)
 {
-  return threshold_init<multivariate>(m, lambda);
+  return generic_init<multivariate>(m, lambda, silent);
 }
 
 // [[Rcpp::export]]
-double hi(NumericVector x, NumericVector y)
+NumericMatrix dginit(NumericMatrix m, double lambda, const bool silent)
 {
-  gaussian_degenerate_zero mdl(0);
-  return mdl.mutual_information(x, y);
+  return generic_init<gaussian_degenerate_zero>(m, lambda, silent);
 }
 
  // [[Rcpp::export]]
-NumericMatrix mixed_threshold_init(NumericMatrix x,
-                                        NumericMatrix y,
-                                        double lambda)
+NumericMatrix minit(NumericMatrix x,
+                    NumericMatrix y,
+                    double lambda, bool silent)
 {
   const int index_offset  = x.ncol(); // size of x
   if (x.nrow() != y.nrow())
@@ -93,9 +90,10 @@ NumericMatrix mixed_threshold_init(NumericMatrix x,
 
   const CharacterVector xNames = VECTOR_ELT(x.attr("dimnames"), 1);
   const CharacterVector yNames = VECTOR_ELT(y.attr("dimnames"), 1);
-  const CharacterVector newNames = concat(as<strvec>(xNames), as<strvec>(yNames));
+  const CharacterVector newNames = concat(as<strvec>(xNames),
+    as<strvec>(yNames));
   
-  threshold_initializer builder(lambda);
+  graph_builder builder(lambda, silent);
   std::vector<w_edge> edges;
   
   // step 1) calculate edges
@@ -103,11 +101,11 @@ NumericMatrix mixed_threshold_init(NumericMatrix x,
   multivariate disc(lambda);
   mixed mix(lambda);
   
-  Rcout << "Calculating gaussian edges.." << std::endl;
+  //Rcout << "Calculating gaussian edges.." << std::endl;
   builder.add_edges(x, 0, &gauss, &edges);
-  Rcout << "\nCalculating discrete edges.." << std::endl;
+  //Rcout << "\nCalculating discrete edges.." << std::endl;
   builder.add_edges(y, index_offset, &disc, &edges);
-  Rcout << "\nCalculating mixed edges.." << std::endl;
+  //Rcout << "\nCalculating mixed edges.." << std::endl;
   builder.add_edges_mixed(x, y, 0, index_offset, &mix, &edges);
   
   // step 2) sort
@@ -116,7 +114,7 @@ NumericMatrix mixed_threshold_init(NumericMatrix x,
   // step 3) make r friendly
   NumericMatrix out(edges.size(), 2);
   
-  Rcout << "\nConverting to R objects.." << std::endl;
+  //Rcout << "\nConverting to R objects.." << std::endl;
   wrapper w;
   w(edges, newNames, &out);
   

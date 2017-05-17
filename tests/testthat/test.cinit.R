@@ -1,9 +1,7 @@
-Rcpp::sourceCpp("../src/threshold_init.cpp")
-
-context("cont_threshold_init (no penalty)")
+context("cinit (no penalty)")
 
 test_that("compiles", {
-  expect_equal( find('cont_threshold_init'), '.GlobalEnv')
+  expect_equal( find('cinit'), 'package:gruph')
 })
 
 test_that("gaussian mutual information", {
@@ -11,14 +9,14 @@ test_that("gaussian mutual information", {
   x <- rnorm(50)
   y <- rnorm(50)
   w1 <- - 0.5 * log(1 - cor(x, y)^2)
-  w2 <- attr(cont_threshold_init(matrix(c(x,y), ncol = 2), 0), "weights")
+  w2 <- attr(cinit(matrix(c(x,y), ncol = 2), 0, TRUE), "weights")
   expect_equal(w1, w2) 
 })
 
 test_that("dimensions", {
   testdata <- iris[, -5]  
   testdata <- as.matrix(testdata)
-  edges <- cont_threshold_init(testdata, lambda = 0)
+  edges <- cinit(testdata, lambda = 0, TRUE)
   
   expect_equal(ncol(edges), 2)
   expect_equal(nrow(edges), 6)
@@ -28,19 +26,19 @@ test_that("dimensions", {
 test_that("weights", {
   testdata <- iris[, -5]  
   testdata <- as.matrix(testdata)
-  edges <- cont_threshold_init(testdata, lambda = 0)
+  edges <- cinit(testdata, lambda = 0, TRUE)
   
   w <- attr(edges, "weights")
   expect_length(w, 6)
   expect_equal(w[order(-w)], w) # is sorted
 })
 
-context("cont_threshold_init (with penalty)")
+context("cinit (with penalty)")
 
 test_that("weights", {
   testdata <- iris[, -5]  
   testdata <- as.matrix(testdata)
-  edges <- cont_threshold_init(testdata, lambda = 0.6)
+  edges <- cinit(testdata, lambda = 0.6, TRUE)
   
   expect_length(attr(edges, "weights"), 2)
 })
@@ -48,14 +46,14 @@ test_that("weights", {
 test_that("dimensions", {
   testdata <- iris[, -5]  
   testdata <- as.matrix(testdata)
-  edges <- cont_threshold_init(testdata, lambda = 0.6)
+  edges <- cinit(testdata, lambda = 0.6, TRUE)
   
   expect_equal(ncol(edges), 2)
   expect_equal(nrow(edges), 2)
   
   w <- replicate(1000, {
     xx <- matrix(rnorm(100), ncol = 2)
-    attr(cont_threshold_init(xx, lambda = 0), "weights")
+    attr(cinit(xx, lambda = 0, TRUE), "weights")
   })
   w
   quantile(100 * w, c(0.2, 0.5,0.8,0.9))
