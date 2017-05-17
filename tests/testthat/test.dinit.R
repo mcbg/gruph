@@ -1,9 +1,7 @@
-Rcpp::sourceCpp("../src/threshold_init.cpp")
-
-context("discrete_threshold_init (no penalty)")
+context("dinit (no penalty)")
 
 test_that('compiles', {
-  expect_equal( find('discrete_threshold_init'), '.GlobalEnv')
+  expect_equal( find('dinit'), 'package:gruph')
 })
 
 test_that('correct dimensions', {
@@ -11,7 +9,7 @@ test_that('correct dimensions', {
   mtdist <- mtcars[, c("cyl", "vs", "am", "gear", "carb")]
   mtdist <- as.matrix(mtdist)
   
-  edges <- discrete_threshold_init(mtdist, 0)
+  edges <- dinit(mtdist, 0, TRUE)
   
   
   w <- attr(edges, "weights")

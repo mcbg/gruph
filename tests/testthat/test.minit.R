@@ -1,9 +1,7 @@
-Rcpp::sourceCpp("../src/threshold_init.cpp")
-
-context("mixed_threshold_init (no penalty)")
+context("minit (no penalty)")
 
 test_that('compiles', {
-  expect_equal( find('mixed_threshold_init'), '.GlobalEnv')
+  expect_equal( find('minit'), 'package:gruph')
 })
 
 test_that('dimensions', {
@@ -14,6 +12,5 @@ test_that('dimensions', {
   mtcont <- mtcars[, cont]
   mtcont <- as.matrix(mtcont)
   
-  edges <- mixed_threshold_init(mtcont, mtdist, 0)
-  expect_equal( find('mixed_threshold_init'), '.GlobalEnv')
+  edges <- minit(mtcont, mtdist, 0, TRUE)
 })
