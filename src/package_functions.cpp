@@ -6,6 +6,7 @@
 #include "model_mixed.h"
 #include "model_gaussian_degenerate_zero.h"
 
+#include "progress_logging.h"
 #include "w_edge.h"
 #include "wrapper.h"
 #include "graph_builder.h"
@@ -26,7 +27,7 @@ NumericMatrix generic_init(const NumericMatrix &x,
   // step 0: initate initializer and colnames
   
   std::vector<w_edge> edges; 
-  graph_builder init(lambda, silent);
+  graph_builder init(lambda, !silent);
   M mModel = M(lambda);
   
   auto gen_colnames = [] (int n) {
@@ -43,6 +44,7 @@ NumericMatrix generic_init(const NumericMatrix &x,
   
   // step 1: calculate and sort edges
   //Rcout << "Calculating edges.." << std::endl;
+  
   init.add_edges(x, 0, &mModel, &edges);
   
   // step 2: convert to R matrix

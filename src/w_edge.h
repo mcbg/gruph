@@ -5,7 +5,8 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-typedef int64_t our_int;
+//typedef int64_t our_int;
+typedef size_t our_int;
 
 struct w_edge {
   our_int i;
