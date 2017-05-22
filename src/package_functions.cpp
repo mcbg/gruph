@@ -6,7 +6,7 @@
 #include "model_mixed.h"
 #include "model_gaussian_degenerate_zero.h"
 
-#include "progress_logging.h"
+#include "output.h"
 #include "w_edge.h"
 #include "wrapper.h"
 #include "graph_builder.h"

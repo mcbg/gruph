@@ -22,6 +22,14 @@ constexpr T isNotZero (double x)
   return x != 0 ? T(1) : T(0);
 };
 
+variable make_expression_indicator(const variable &x)
+{
+  // Returns vector that indicates 
+  variable a(x.size());
+  transform(begin(x), end(x), begin(a), isNotZero<double>);
+  return a;
+} 
+
 inline double gaussian_mutual (double rho) { return - log(1 - rho * rho) / 2; };
 
 class gaussian_degenerate_zero : public model
@@ -51,6 +59,8 @@ double gaussian_degenerate_zero::local_cor(const variable &x, const variable &y)
   return sf.cor(mx, my);
 }
 
+
+// todo: move to .cpp
 double gaussian_degenerate_zero::mutual_information(variable x, variable y)
 {
   double information{0};
@@ -96,4 +106,34 @@ double gaussian_degenerate_zero::mutual_information(variable x, variable y)
     
   return information;
 }
+
+class gaussian_degenerate_zero_mixed : public model
+{
+  /**
+   * This uses Steffens approximation
+   */
+public:
+  multivariate mult;
+  gaussian_degenerate_zero_mixed(double l) : model(l), mult(l) {} 
+  
+  double mutual_information(variable u, variable d)
+  {
+   double sigma_tilde;
+   double sigma;
+   double information{0};
+   variable a{make_expression_indicator(u)};
+   
+   // calculate probabilites
+   double probability_nonzero{0};
+   for(auto x : a) { probability_nonzero += x; }
+   probability_nonzero /= a.size();
+  
+   // calculate I(A,D)
+   information += mult.mutual_information(a, d);
+   
+   // second term
+   information += probability_nonzero * 0.5 * log(sigma_tilde / sigma);
+  }
+  
+};
 #endif
