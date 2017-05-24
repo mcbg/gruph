@@ -1,13 +1,16 @@
 #ifndef DEGEN_MIX_MDL
 #define DEGEN_MIX_MDL
 
+#include "model.h"
+#include "model_multivariate.h"
 #include <unordered_map>
 
+// [[Rcpp::plugins(cpp11)]]
 variable make_expression_indicator(const variable &x)
 {
   // Returns vector that indicates 
   variable a(x.size());
-  transform(begin(x), end(x), begin(a), isNotZero<double>);
+  std::transform(x.begin(), x.end(), a.begin(), [] (double x) { return x != 0 ? 1.0 : 0.0; });
   return a;
 } 
 
@@ -21,7 +24,7 @@ double variance_conditioned(variable x, variable d)
   for (int i = 0; i < x.size(); ++i) {
     means[d[i]] += x[i];
     if (x[i] != 0)
-      ++counts[d[i]]
+      ++counts[d[i]];
   }
 
   for(auto &p : means) {
@@ -34,9 +37,14 @@ double variance_conditioned(variable x, variable d)
 
   // calculate SSD for each sample
   for(int i = 0; i < x.size(); ++i) {
-    sample_ssd[d[i]] += (x[i] - means[y[i]]) * (x[i] - means[y[i]]);
+    ssd[d[i]] += (x[i] - means[d[i]]) * (x[i] - means[d[i]]);
   }
   
+  for(auto &p : ssd) {
+    var += p.second;
+    //p.second /= counts[p.first]; // we normalize using N_j, so we use the ML estimate
+  }
+  var /= x.size();
   return var;
 }
 
@@ -58,9 +66,9 @@ double variance_skip_zero(variable x)
 
   // CALCULATE VARIANCE
   for(auto e : x) {
-    var += (e - mean) * (e - mean)
+    var += (e - mean) * (e - mean);
   }
-  var /= (non_zero_size - 1);
+  var /= non_zero_size;
   return var;
 }
 
@@ -75,8 +83,8 @@ public:
   
   double mutual_information(variable u, variable d)
   {
-   double sigma_tilde;
-   double sigma;
+   double sigma{ variance_conditioned(u, d) };
+   double sigma_tilde{ variance_skip_zero(u) };
    double information{0};
    variable a{make_expression_indicator(u)};
    
@@ -91,6 +99,7 @@ public:
    
    // second term
    information += probability_nonzero * 0.5 * log(sigma_tilde / sigma);
+   return information;
   }
   
 };
