@@ -15,6 +15,7 @@ double variance_conditioned(variable x, variable d)
 {
   std::unordered_map<double, double> means;
   std::unordered_map<double, double> counts;
+  std::unordered_map<double, double> ssd;
 
   // CALCULATE "MEANS"
   for (int i = 0; i < x.size(); ++i) {

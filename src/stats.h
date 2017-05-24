@@ -117,7 +117,7 @@ public:
       // theres no need to times and then divide with the
       ssd += t.second;
     }
-    ssd /= x.size();
+    ssd /= x.size(); // TODO: SHOULD BE N - k ??
     
     // 5) set df
     *df = means.size() - 1;
