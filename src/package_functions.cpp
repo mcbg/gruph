@@ -2,6 +2,7 @@
 
 // MODELS
 #include "model_gaussian.h"
+#include "model_degenerate_mixed.h"
 #include "model_multivariate.h"
 #include "model_mixed.h"
 #include "model_gaussian_degenerate_zero.h"

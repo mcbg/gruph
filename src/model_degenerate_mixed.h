@@ -81,6 +81,13 @@ public:
   multivariate mult;
   gaussian_degenerate_zero_mixed(double l) : model(l), mult(l) {} 
   
+  /**
+   * param u: continous variable with degenerate zero
+   * param d: discrete variable
+   * 
+   * changes df
+   * returns: mutual information between variables
+   */
   double mutual_information(variable u, variable d)
   {
    double sigma{ variance_conditioned(u, d) };
@@ -88,17 +95,22 @@ public:
    double information{0};
    variable a{make_expression_indicator(u)};
    
+   df = 0; // reset df!
+   
    // calculate probabilites
    double probability_nonzero{0};
    for(auto x : a) { probability_nonzero += x; }
    probability_nonzero /= a.size();
   
    // calculate I(A,D)
-   // TODO: condition on probability >0
    information += mult.mutual_information(a, d);
+   df += mult.get_df();
    
    // second term
+   
    information += probability_nonzero * 0.5 * log(sigma_tilde / sigma);
+   df += 1;
+   
    return information;
   }
   
