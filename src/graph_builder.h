@@ -40,6 +40,8 @@ public:
         
         if (w > lambda * df) {
           edges->push_back({i + xoffset, j + yoffset, w, df});
+        } else {
+          //Rcpp::warning("lol");
         }
         
         progress.go();

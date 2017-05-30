@@ -8,6 +8,7 @@ import(ggplot2)
 export('cinit')
 export('dinit')
 export('minit')
+export('dminit')
 export('dginit')
 
 export('max_forest')
