@@ -1,7 +1,7 @@
 context("dginit (no penalty)")
 
 test_that('compiles', {
-  expect_equal(find('dinit'), 'package:gruph')
+  expect_equal(find('dginit'), 'package:gruph')
 })
 
 test_that('is the same as cinit without zeroes', {
@@ -18,7 +18,7 @@ test_that('no Inf/-Inf with zeroes.', {
   zeros_index <- sample(c(TRUE,FALSE), 100, replace = TRUE)
   xx[zeros_index] <- 0
   dim(xx) <- c(10, 10)
-  
+ edges 
   w <- weights(dginit(xx, 0, TRUE))
   
   expect_false(any(c(Inf,-Inf) %in% w))

@@ -12,5 +12,5 @@ test_that('dimensions', {
   mtcont <- mtcars[, cont]
   mtcont <- as.matrix(mtcont)
   
-  edges <- minit(mtcont, mtdist, 0, TRUE)
+  edges <- minit(mtcont, mtdist, 0, FALSE)
 })
