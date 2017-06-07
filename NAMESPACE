@@ -11,6 +11,8 @@ export('minit')
 export('dminit')
 export('dginit')
 
+export('chunk_add_edges')
+
 export('max_forest')
 export('weights')
 export('dfs')

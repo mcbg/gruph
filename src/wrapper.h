@@ -44,3 +44,31 @@ struct wrapper
   }
 
 };
+
+struct df_wrapper
+{
+  template<typename T>
+  List operator() (T edges)
+  {
+    
+    // sort  out vectors
+    const int n = edges.size();
+    NumericVector coordx(n);
+    NumericVector coordy(n);
+    NumericVector weight(n);
+    NumericVector df(n);
+    
+    for (int i = 0; i < n ; ++i) {
+      coordx[i] = edges[i].i;
+      coordy[i] = edges[i].j;
+      weight[i] = edges[i].weight;
+      df[i] = edges[i].df;
+    }
+    
+    return List::create(Named("i") = coordx,
+                        Named("j") = coordy,
+                        Named("weights") = weight,
+                        Named("df") = df
+                        );
+  }
+};
