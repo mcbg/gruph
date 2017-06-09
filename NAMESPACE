@@ -12,7 +12,9 @@ export('dminit')
 export('dginit')
 
 export('chunk_add_edges')
+export('fixed_graph_builder')
 
+export('sim_gene_data')
 export('max_forest')
 export('weights')
 export('dfs')
