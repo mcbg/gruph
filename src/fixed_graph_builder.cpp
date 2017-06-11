@@ -89,7 +89,7 @@ private:
  * Finds the top `queue_size` edges wrt penalized ML.
  */
 // [[Rcpp::export]]
-List fl_dginit(Rcpp::NumericMatrix xx, // degenerate
+DataFrame fl_dginit(Rcpp::NumericMatrix xx, // degenerate
                          Rcpp::NumericMatrix yy, // discrete
                          int queue_size,
                          double penalty,
@@ -104,7 +104,7 @@ List fl_dginit(Rcpp::NumericMatrix xx, // degenerate
   myqueue edges(queue_size, penalty); 
   df_wrapper wrpr;
   
-  const size_t disrete_offset = yy.ncol() + 1;
+  const size_t disrete_offset = xx.ncol() + 1;
   add_edges<myqueue, gaussian_degenerate_zero>(edges, xx, 1, verbose);
   add_edges<myqueue, multivariate>(edges, yy, disrete_offset, verbose);
   add_edges_mixed<myqueue, gaussian_degenerate_zero_mixed>(edges,

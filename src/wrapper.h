@@ -48,7 +48,7 @@ struct wrapper
 struct df_wrapper
 {
   template<typename T>
-  List operator() (const T &edges)
+  DataFrame operator() (const T &edges)
   {
     
     // sort  out vectors
@@ -65,10 +65,10 @@ struct df_wrapper
       df[i] = edges[i].df;
     }
     
-    return List::create(Named("i") = coordx,
-                        Named("j") = coordy,
-                        Named("weights") = weight,
-                        Named("df") = df
+    return DataFrame::create(_("i") = coordx,
+                        _("j") = coordy,
+                        _("weights") = weight,
+                        _("df") = df
                         );
   }
 };
