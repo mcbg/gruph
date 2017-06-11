@@ -13,6 +13,7 @@ using namespace Rcpp;
 using namespace std;
 using namespace boost;
 
+// inverts the `<` operator, so we find max forest
 struct inv_double
 {
   inv_double(double pw,
