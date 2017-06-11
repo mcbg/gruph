@@ -8,3 +8,11 @@ sim_gene_data <- function(n = 1000, k = 1000) {
   replicate(n, calc_column())
 } 
 
+
+sim_discrete_data <- function(n = 1000, k = 1000) {
+  calc_column <- function() {
+    s <- sample(c(1, 2), k, replace = TRUE)
+    s
+  }
+  replicate(n, calc_column())
+} 

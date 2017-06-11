@@ -11,10 +11,11 @@ export('minit')
 export('dminit')
 export('dginit')
 
-export('chunk_add_edges')
-export('fixed_graph_builder')
+export('fl_dginit')
 
 export('sim_gene_data')
+export('sim_discrete_data')
+
 export('max_forest')
 export('weights')
 export('dfs')

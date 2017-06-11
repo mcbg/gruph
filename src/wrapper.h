@@ -48,7 +48,7 @@ struct wrapper
 struct df_wrapper
 {
   template<typename T>
-  List operator() (T edges)
+  List operator() (const T &edges)
   {
     
     // sort  out vectors

@@ -9,7 +9,7 @@
  * T: type stored in underlying vector
  * F: struct containing functions to compare elements
  * 
- * https://stackoverflow.com/questions/33180609/how-to-create-a-min-heap-of-fixed-size-using-stdpriority-queue
+ * based on: https://stackoverflow.com/questions/33180609/how-to-create-a-min-heap-of-fixed-size-using-stdpriority-queue
  */
 
 using namespace std;
@@ -17,7 +17,7 @@ template <typename T, class F>
 
 class fl_heap {
 public:
-  fl_heap(int k, double l) : k_(k), cmp(l) {}
+  fl_heap(int k, double l) : k_(k), cmp_(l) {}
   
   void insert(T value)
   {
@@ -26,21 +26,32 @@ public:
       c_.push_back(value);
       if (c_.size() == k_) make_heap(c_.begin(), c_.end());
     }
-    else if (cmp(value, c_[0])) {
+    else if (cmp_(value, c_[0])) {
       /* See note below */
-      pop_heap(c_.begin(), c_.end(), cmp);
+      pop_heap(c_.begin(), c_.end(), cmp_); 
       c_.back() = value;
-      push_heap(c_.begin(), c_.end(), cmp);
+      push_heap(c_.begin(), c_.end(), cmp_);
     }
   }
-  std::vector<T> finalize() {
+  std::vector<T> finalize()
+  {
+    // returns vector sorted from largest to smallest
+    // DONT USE `fl_heap` OBJECT AFTER FINALISING!
+    
+    if (c_.size() < k_)
+      std::sort(c_.begin(), c_.end(), cmp_);
+    else
+      sort_heap(c_.begin(), c_.end(), cmp_);
+    
     std::vector<T> c;
-    std::swap(c, c_);
-    return c; // Makes unusable!
+    std::swap(c, c_); // this makes `c_` unusable
+    
+    return c; // Makes fl_heap object unusable!
   }
+  
 private:
   /* invariant: if c_.size() == k, then c_ is a maxheap. */
   size_t k_;
   std::vector<T> c_;
-  F cmp;
+  F cmp_;
 };

@@ -3,7 +3,11 @@
 #include "fl_heap.h"
 #include "w_edge.h"
 #include "wrapper.h"
+#include "output.h"
+
 #include "model_gaussian_degenerate_zero.h"
+#include "model_multivariate.h"
+#include "model_degenerate_mixed.h"
 
 #include<Rcpp.h>
 
@@ -15,13 +19,18 @@ constexpr double penalized_ML(w_edge x, double lambda)
 }
 
 template<class T, class M>
-void add_edges(T &edges, NumericMatrix xx, int offset)
+void add_edges(T &edges, NumericMatrix xx, int offset, bool verbose)
 {
+  // stuff for progress bar
+  const size_t computations = xx.ncol() * (xx.ncol() - 1) * 0.5;
+  progress_bar progress(computations, verbose);
+  
   M model(0);
-  for (size_t i = 0; i < xx.cols(); ++i) {
+  for (size_t i = 0; i < xx.cols() - 1; ++i) {
     Rcpp::NumericVector x = xx(_, i);
     
     for (size_t j = i + 1; j < xx.cols(); ++j) {
+      progress.go();
       Rcpp::NumericVector y = xx(_, j);
       double w = model.mutual_information(x, y);
       size_t df = model.get_df();
@@ -37,8 +46,13 @@ void add_edges_mixed(T &edges,
                      NumericMatrix xx,
                      NumericMatrix yy,
                      int offset,
-                     int offset2)
+                     int offset2,
+                     bool verbose)
 {
+  // stuff for progress bar
+  const size_t computations = xx.ncol() * yy.ncol();
+  progress_bar progress(computations, verbose);
+
   M model(0);
   for (size_t i = 0; i < xx.cols(); ++i) {
     Rcpp::NumericVector x = xx(_, i);
@@ -50,6 +64,7 @@ void add_edges_mixed(T &edges,
       w_edge e{i + offset, j + offset2, w, df};
       
       edges.insert(e);
+      progress.go();
     } 
   }
 }
@@ -70,17 +85,34 @@ private:
 
 /** find homogenous edges---between variables of the same distribution. Has
  * two modes "degenerate" and discrete.
+ * 
+ * Finds the top `queue_size` edges wrt penalized ML.
  */
 // [[Rcpp::export]]
-List fixed_graph_builder(Rcpp::NumericMatrix xx,
-                                    int queue_size,
-                                    double penalty)
+List fl_dginit(Rcpp::NumericMatrix xx, // degenerate
+                         Rcpp::NumericMatrix yy, // discrete
+                         int queue_size,
+                         double penalty,
+                         bool verbose)
 {
+  if (xx.nrow() != yy.nrow())
+    Rcpp::stop("different number of rows in xx and yy");
+  
   typedef fl_heap<w_edge, compare_edges> myqueue;
-  myqueue edges(queue_size, penalty);
+  
+  // edges is the only component that uses our penalty
+  myqueue edges(queue_size, penalty); 
   df_wrapper wrpr;
   
-  add_edges<myqueue, gaussian_degenerate_zero>(edges, xx, 1);
+  const size_t disrete_offset = yy.ncol() + 1;
+  add_edges<myqueue, gaussian_degenerate_zero>(edges, xx, 1, verbose);
+  add_edges<myqueue, multivariate>(edges, yy, disrete_offset, verbose);
+  add_edges_mixed<myqueue, gaussian_degenerate_zero_mixed>(edges,
+                                                           xx,
+                                                           yy,
+                                                           1,
+                                                           disrete_offset,
+                                                           verbose);
   
   auto v = edges.finalize();
   return wrpr(v);

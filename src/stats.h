@@ -2,14 +2,15 @@
  * Useful functions for statistics
  *
  */
+
+#ifndef STATS_H
+#define STATS_H
+
 // [[Rcpp::plugins(cpp11)]]
 #include <algorithm>
 #include <cmath>
 #include <Rcpp.h>
 #include <unordered_map>
-
-#ifndef STATS_H
-#define STATS_H
 
 typedef std::vector<double> vec;
 typedef std::pair<vec::iterator, vec::iterator> pairit;
