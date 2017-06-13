@@ -1,5 +1,11 @@
 #include "model_gaussian_degenerate_zero.h"
 
+inline double gaussian_mutual (double rho) {
+  if (rho == 1)
+    return 0;
+  return - log(1 - rho * rho) / 2;
+};
+
 double gaussian_degenerate_zero::local_cor(const variable &x, const variable &y)
 {
   vector<double> mx;
@@ -21,6 +27,7 @@ double gaussian_degenerate_zero::local_cor(const variable &x, const variable &y)
 // todo: move to .cpp
 double gaussian_degenerate_zero::mutual_information(variable x, variable y)
 {
+  int n = x.size();
   double information{0};
   df = 0; // reset df
   
@@ -40,9 +47,9 @@ double gaussian_degenerate_zero::mutual_information(variable x, variable y)
   const bool include_gaussian_term = p[1][1] >= 3;
     
   for_each(begin(p), end(p),
-    [&y] (double x[2]) {
-      x[0] /= y.size();
-      x[1] /= y.size();
+    [&n] (double x[2]) {
+      x[0] /= n;
+      x[1] /= n;
   });
   
   // calculate I(A,B)
@@ -58,7 +65,8 @@ double gaussian_degenerate_zero::mutual_information(variable x, variable y)
   // calculate I(X,Y)
   if (include_gaussian_term) {
     double rho = this->local_cor(x,y);
-    information += p[1][1] * gaussian_mutual(rho);
+    if (rho * rho < 1)
+      information += p[1][1] * n * gaussian_mutual(rho);
     df += 1;
   }
     

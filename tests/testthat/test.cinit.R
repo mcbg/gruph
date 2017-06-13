@@ -8,7 +8,7 @@ test_that("gaussian mutual information", {
   set.seed(12)
   x <- rnorm(50)
   y <- rnorm(50)
-  w1 <- - 0.5 * log(1 - cor(x, y)^2)
+  w1 <- - 0.5 * 50 * log(1 - cor(x, y)^2)
   w2 <- attr(cinit(matrix(c(x,y), ncol = 2), 0, TRUE), "weights")
   expect_equal(w1, w2) 
 })
@@ -38,7 +38,7 @@ context("cinit (with penalty)")
 test_that("weights", {
   testdata <- iris[, -5]  
   testdata <- as.matrix(testdata)
-  edges <- cinit(testdata, lambda = 0.6, TRUE)
+  edges <- cinit(testdata, lambda = 150 * 0.6, TRUE)
   
   expect_length(attr(edges, "weights"), 2)
 })
@@ -46,7 +46,7 @@ test_that("weights", {
 test_that("dimensions", {
   testdata <- iris[, -5]  
   testdata <- as.matrix(testdata)
-  edges <- cinit(testdata, lambda = 0.6, TRUE)
+  edges <- cinit(testdata, lambda = 150 * 0.6, TRUE)
   
   expect_equal(ncol(edges), 2)
   expect_equal(nrow(edges), 2)

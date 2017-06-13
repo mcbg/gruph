@@ -77,6 +77,7 @@ double variance_skip_zero(variable x)
 
 double gaussian_degenerate_zero_mixed::mutual_information(variable u, variable d)
 {
+  size_t n = u.size();
   double sigma{ variance_conditioned(u, d) };
   double sigma_tilde{ variance_skip_zero(u) };
   double information{0};
@@ -87,16 +88,21 @@ double gaussian_degenerate_zero_mixed::mutual_information(variable u, variable d
   // calculate probabilites
   double probability_nonzero{0};
   for(auto x : a) { probability_nonzero += x; }
-  probability_nonzero /= a.size();
+  probability_nonzero /= n;
 
   // calculate I(A,D)
-  information += mult.mutual_information(a, d);
-  df += mult.get_df();
+  if (probability_nonzero != 1) {
+    information += mult.mutual_information(a, d);
+    df += mult.get_df();
+  }
  
   // second term
- 
-  information += probability_nonzero * 0.5 * log(sigma_tilde / sigma);
-  df += 1; // TODO: ?????????
+  if (probability_nonzero != 0 &&
+      sigma_tilde > 0 &&
+      sigma > 0)
+    information += probability_nonzero * n * 0.5 * log(sigma_tilde / sigma);
+  
+  df += 1; 
  
   return information;
 }

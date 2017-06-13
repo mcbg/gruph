@@ -20,7 +20,6 @@ constexpr T isNotZero (double x)
   return x != 0 ? T(1) : T(0);
 };
 
-inline double gaussian_mutual (double rho) { return - log(1 - rho * rho) / 2; };
 
 class gaussian_degenerate_zero : public model
 {

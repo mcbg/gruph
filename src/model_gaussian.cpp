@@ -15,5 +15,5 @@ double gaussian::mutual_information(variable px, variable py)
   stats_functions<vec> stats;
   double correlation = stats.cor(x, y);
   
-  return -0.5 * std::log(1 - correlation * correlation);
+  return -0.5 * x.size() * std::log(1 - correlation * correlation);
 }

@@ -40,5 +40,8 @@ double multivariate::mutual_information(variable px, variable py)
   // SET DF
   df = (xlabels.size() - 1) * (ylabels.size() - 1);
   
-  return mutual_info / (2 * x.size());
+  if (df == 0)
+    return 0;
+  
+  return 0.5 * mutual_info;
 }

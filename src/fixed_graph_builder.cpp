@@ -76,11 +76,11 @@ struct compare_edges
   
   bool operator()(w_edge x, w_edge y)
   {
-    if (x.df == 0)
+    if (x.df == 0 && y.df != 0)
       return false;
-    if (R_IsNaN(x.weight))
-      return false;
-
+    if (y.df == 0 && x.df != 0)
+      return true;
+    
     return penalized_ML(x, lambda) > penalized_ML(y, lambda);
   }
 private:
