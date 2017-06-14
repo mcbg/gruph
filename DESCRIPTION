@@ -8,9 +8,10 @@ Maintainer: Michael Galanakis <vhg505@alumni.ku.dk>
 Description: Fits graphical models. Supports gaussian, discrete, and mixed models.  Makes use of a weight matrix, which supports filtering small weights.
 License: GPL (>= 2)
 Imports:
-  Rcpp (>= 0.12.9),
-  ggplot2,
-  BH
+  BH,
+  Rcpp (>= 0.12.9)
+Suggests:
+  ggplot2
 LinkingTo:
   Rcpp,
   BH

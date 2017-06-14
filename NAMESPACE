@@ -12,6 +12,7 @@ export('dminit')
 export('dginit')
 
 export('fl_dginit')
+export('fl_linear')
 
 export('sim_gene_data')
 export('sim_discrete_data')

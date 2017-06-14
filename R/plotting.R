@@ -1,4 +1,8 @@
 calc_pval <- function(edges, N) {
+ if (!requireNamespace("ggplot2", quietly = TRUE)) {
+       stop("ggplot2 needed for this function to work. ",
+                  call. = FALSE)
+  }
   dfs <- attr(edges, "df")
   ws <- attr(edges, "weights")
   get_p_value <- function(w, degrees) pchisq(2 * N * w, degrees, lower.tail = TRUE)
@@ -14,12 +18,16 @@ pval_dataframe <- function(edges, N) {
 }
 
 weight_plot <- function(edges, N) {
+ if (!requireNamespace("ggplot2", quietly = TRUE)) {
+       stop("ggplot2 needed for this function to work. ",
+                  call. = FALSE)
+  }
   # N: number of observations
   
   xx <- pval_dataframe(edges, N)
   
   ggplot(aes(x = index, y = p), data = xx) +
-    geom_point() 
+    geom_line() 
     #geom_abline(slope = -1, intercept = 1, col = "red", size = 1.2) 
     #ylim(0, 1)
     #facet_wrap(~df) #+ xlim(0, 1) + ylim(0, 1) 
@@ -29,6 +37,10 @@ weight_plot <- function(edges, N) {
 }
 
 weight_histogram <- function(edges, N, facet = TRUE){
+ if (!requireNamespace("ggplot2", quietly = TRUE)) {
+       stop("ggplot2 needed for this function to work. ",
+                  call. = FALSE)
+  }
   # N: number of observations
   
   get_p_value <- function(w, degrees) pchisq(2 * N * w, degrees, lower.tail = TRUE)
