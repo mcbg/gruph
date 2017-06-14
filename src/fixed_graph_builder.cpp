@@ -122,3 +122,31 @@ DataFrame fl_dginit(Rcpp::NumericMatrix xx, // degenerate
   auto v = edges.finalize();
   return wrpr(v);
 }
+
+// [[Rcpp::export]]
+DataFrame fl_linear(Rcpp::NumericMatrix xx, // degenerate
+                         Rcpp::NumericMatrix yy, // discrete
+                         int queue_size,
+                         double penalty,
+                         bool verbose)
+{
+  if (xx.nrow() != yy.nrow())
+    Rcpp::stop("different number of rows in xx and yy");
+  
+  typedef fl_heap<w_edge, compare_edges> myqueue;
+  
+  // edges is the only component that uses our penalty
+  myqueue edges(queue_size, penalty); 
+  df_wrapper wrpr;
+  
+  const size_t disrete_offset = xx.ncol() + 1;
+  add_edges_mixed<myqueue, gaussian_degenerate_zero_mixed>(edges,
+                                                           xx,
+                                                           yy,
+                                                           1,
+                                                           disrete_offset,
+                                                           verbose);
+  
+  auto v = edges.finalize();
+  return wrpr(v);
+}
