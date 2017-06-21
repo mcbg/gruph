@@ -16,6 +16,7 @@ export('fl_linear')
 
 export('sim_gene_data')
 export('sim_discrete_data')
+export('chunk_builder')
 
 export('max_forest')
 export('weights')

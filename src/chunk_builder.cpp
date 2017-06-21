@@ -9,15 +9,17 @@ using namespace Rcpp;
 
 
 // [[Rcpp::export]]
-List chunk_add_edges(const Rcpp::NumericMatrix xx,  double lambda, int start, int chuck_size)
+List chunk_builder(const Rcpp::NumericMatrix xx, int chunk_num, int chunk_size)
   {
-    gaussian_degenerate_zero model(lambda);
+    gaussian_degenerate_zero model(0);
     df_wrapper wrpr;
     
     vector<w_edge> edges;
-    size_t r_end = std::min(start + chuck_size - 1, xx.cols());
+    --chunk_num;
+    int start = chunk_num * chunk_size;
+    int r_end = std::min(start + chunk_size, xx.cols());
     
-    for (size_t i = start - 1; i < r_end; ++i) {
+    for (size_t i = start; i < r_end; ++i) {
       Rcpp::NumericVector x = xx(_, i);
       
       for(size_t j = i + 1; j < xx.cols(); ++j) {
@@ -25,9 +27,7 @@ List chunk_add_edges(const Rcpp::NumericMatrix xx,  double lambda, int start, in
         double w = model.mutual_information(x, y);
         size_t df = model.get_df();
         
-        if (w > lambda * df) {
-          edges.push_back({i + 1, j + 1, w, df});
-        } 
+        edges.push_back({i + 1, j + 1, w, df});
       }
     }
     
