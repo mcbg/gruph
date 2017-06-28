@@ -11,10 +11,11 @@
 using namespace std;
 
 // [[Rcpp::export]]
-List full_dinit(const Rcpp::NumericMatrix xx)
+List full_dinit(const Rcpp::NumericMatrix xx, int offset)
   {
     multivariate model(0);
     df_wrapper wrpr;
+    ++offset;
     
     vector<w_edge> edges;
     //edges.reserve(chunk_computations(xx.ncol(), chunk_size));
@@ -27,7 +28,7 @@ List full_dinit(const Rcpp::NumericMatrix xx)
         double w = model.mutual_information(x, y);
         size_t df = model.get_df();
         
-        edges.push_back({i + 1, j + 1, w, df});
+        edges.push_back({i + offset, j + offset, w, df});
       }
     }
     
@@ -40,6 +41,7 @@ List full_linear(const Rcpp::NumericMatrix xx,
   {
     gaussian_degenerate_zero_mixed model(0);
     df_wrapper wrpr;
+    int yoffset = xx.ncol() + 1;
     
     vector<w_edge> edges;
     //edges.reserve(chunk_computations(xx.ncol(), chunk_size));
@@ -53,7 +55,7 @@ List full_linear(const Rcpp::NumericMatrix xx,
         double w = model.mutual_information(x, y);
         size_t df = model.get_df();
         
-        edges.push_back({i + 1, j + 1, w, df});
+        edges.push_back({i + 1, j + yoffset, w, df});
       }
     }
     
