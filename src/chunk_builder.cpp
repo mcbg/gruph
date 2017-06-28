@@ -7,6 +7,11 @@
 
 using namespace Rcpp;
 
+inline size_t chunk_computations(int n, int k)
+{
+  return n * k - k * (k - 1) * 0.5;
+}
+
 
 // [[Rcpp::export]]
 List chunk_builder(const Rcpp::NumericMatrix xx, int chunk_num, int chunk_size)
@@ -15,6 +20,8 @@ List chunk_builder(const Rcpp::NumericMatrix xx, int chunk_num, int chunk_size)
     df_wrapper wrpr;
     
     vector<w_edge> edges;
+    edges.reserve(chunk_computations(xx.ncol(), chunk_size));
+
     --chunk_num;
     int start = chunk_num * chunk_size;
     int r_end = std::min(start + chunk_size, xx.cols());

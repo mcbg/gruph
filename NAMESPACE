@@ -14,6 +14,9 @@ export('dginit')
 export('fl_dginit')
 export('fl_linear')
 
+export('full_dinit')
+export('full_linear')
+
 export('sim_gene_data')
 export('sim_discrete_data')
 export('chunk_builder')
