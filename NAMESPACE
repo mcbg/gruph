@@ -26,3 +26,5 @@ export('weights')
 export('dfs')
 export('weight_plot')
 export('calc_pval')
+
+export('sgn_info_mat')
