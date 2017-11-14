@@ -21,10 +21,11 @@ db_insert_quad(xx, tb_name, chnk_size, db, start = 1)
 using chunks, to limit memory usage.
 }
 \examples{
-libary(RSQLite)
-mydb <- dbconnect(SQLite(), dbname = "example.db")
+library(RSQLite)
+mydb <- dbConnect(SQLite(), dbname = "example.db")
 data <- as.matrix(iris[, 1:4])
 
-db_insert_quad(data, "graph", 3, mydb)
+db_insert_quad(data, "graph", 2, mydb)
 
+dbDisconnect(mydb)
 }
