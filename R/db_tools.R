@@ -93,6 +93,7 @@ db_insert_lin <- function(expr, clinical, tb_name, db) {
 #' mydb <- dbConnect(SQLite(), dbname = "example.db")
 #' db_max_span_forest(mydb, 100)
 #' 
+#' @import RSQLite
 #' @export
 
 db_max_span_forest <- function(db, tb_name, slices) {
@@ -121,7 +122,7 @@ db_max_span_forest <- function(db, tb_name, slices) {
   for (slice in 1:slices) {
     if (nrow(next_edges) == 0) break
     cat(slice,": ", minW, "\n")
-    next_edges <- dbGetQuery(mydb, mk_query(minW))
+    next_edges <- dbGetQuery(db, mk_query(minW))
     t_edges <- rbind(f, next_edges)
     minW <- getMinWeight(t_edges)
     f <- max_forest(t_edges, num_nodes = 53356, penalty = 0)
