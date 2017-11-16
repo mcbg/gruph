@@ -3,7 +3,7 @@
 \name{db_max_span_forest}
 \alias{db_max_span_forest}
 \title{\code{db_max_span_forest} finds the maximum spanning forest the edges that have been stored in a database.
-The function uses a variant of Kruskal's algorithm.}
+The function uses a variant of Kruskal's algorithm.Note that it saves a file called \code{forest.rds.backup}.}
 \usage{
 db_max_span_forest(db, tb_name, slices)
 }
@@ -16,7 +16,7 @@ db_max_span_forest(db, tb_name, slices)
 }
 \description{
 \code{db_max_span_forest} finds the maximum spanning forest the edges that have been stored in a database.
-The function uses a variant of Kruskal's algorithm.
+The function uses a variant of Kruskal's algorithm.Note that it saves a file called \code{forest.rds.backup}.
 }
 \examples{
 mydb <- dbConnect(SQLite(), dbname = "example.db")

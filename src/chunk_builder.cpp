@@ -16,6 +16,11 @@ inline size_t chunk_computations(int n, int k)
 // [[Rcpp::export]]
 List chunk_builder(const Rcpp::NumericMatrix xx, int chunk_num, int chunk_size)
   {
+    if (chunk_size > xx.ncol()) { // Make sure chunks are smaller than the number of columns
+      chunk_size = xx.ncol();
+      warning("chunk_size too large, using the number of columns instead.");
+    }
+    
     gaussian_degenerate_zero model(0);
     df_wrapper wrpr;
     
@@ -29,7 +34,7 @@ List chunk_builder(const Rcpp::NumericMatrix xx, int chunk_num, int chunk_size)
     for (size_t i = start; i < r_end; ++i) {
       Rcpp::NumericVector x = xx(_, i);
       
-      for(size_t j = i + 1; j < xx.cols(); ++j) {
+      for (size_t j = i + 1; j < xx.cols(); ++j) {
         Rcpp::NumericVector y = xx(_, j);
         double w = model.mutual_information(x, y);
         size_t df = model.get_df();

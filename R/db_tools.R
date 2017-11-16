@@ -83,7 +83,7 @@ db_insert_lin <- function(expr, clinical, tb_name, db) {
 }
 
 #' \code{db_max_span_forest} finds the maximum spanning forest the edges that have been stored in a database.
-#' The function uses a variant of Kruskal's algorithm.
+#' The function uses a variant of Kruskal's algorithm.Note that it saves a file called \code{forest.rds.backup}.
 #' 
 #' @param db connection to a database
 #' @param tb_name string of table name
@@ -119,6 +119,7 @@ db_max_span_forest <- function(db, tb_name, slices) {
   f <- max_forest(next_edges, num_nodes = 53356, penalty = 0)
 
   for (slice in 1:slices) {
+    if (nrow(next_edges) == 0) break
     cat(slice,": ", minW, "\n")
     next_edges <- dbGetQuery(mydb, mk_query(minW))
     t_edges <- rbind(f, next_edges)
