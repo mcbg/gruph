@@ -1,9 +1,5 @@
 context("dginit (no penalty)")
 
-test_that('compiles', {
-  expect_equal(find('dginit'), 'package:gruph')
-})
-
 test_that('is the same as cinit without zeroes', {
   set.seed(12)
   xx <- rnorm(100)

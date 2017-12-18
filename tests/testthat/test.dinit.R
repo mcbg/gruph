@@ -1,9 +1,5 @@
 context("dinit (no penalty)")
 
-test_that('compiles', {
-  expect_equal( find('dinit'), 'package:gruph')
-})
-
 test_that('correct dimensions', {
   # 1) discrete variables of `mtcars`
   mtdist <- mtcars[, c("cyl", "vs", "am", "gear", "carb")]

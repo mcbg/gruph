@@ -1,9 +1,5 @@
 context("cinit (no penalty)")
 
-test_that("compiles", {
-  expect_equal( find('cinit'), 'package:gruph')
-})
-
 test_that("gaussian mutual information", {
   set.seed(12)
   x <- rnorm(50)
