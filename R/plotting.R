@@ -10,6 +10,9 @@ calc_pval <- function(edges, N) {
 } 
 
 #' \code{pval_dataframe} extract p-values of edges.
+#' @param edges data frame of edge list
+#' @param N integer showing the number of observations.
+#' 
 #' @import ggplot2
 #' @export
 pval_dataframe <- function(edges, N) {
@@ -21,6 +24,9 @@ pval_dataframe <- function(edges, N) {
 }
 
 #' \code{weight_plot} plots the p-values of weights for model diagnostics.
+#' @param edges data frame of edge list
+#' @param N integer showing the number of observations.
+#' 
 #' @import ggplot2
 #' @export
 weight_plot <- function(edges, N) {

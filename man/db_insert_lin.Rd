@@ -14,15 +14,9 @@ db_insert_lin(expr, clinical, tb_name, db, gaussian = FALSE)
 \item{tb_name}{string with name for DB table}
 
 \item{db}{connection to database}
+
+\item{gaussian}{uses gaussian distribution if true; degenerate if false}
 }
 \description{
 \code{db_insert_lin} adds all expression-clinical (linear) edges to a database.
-}
-\examples{
-library(RSQLite)
-mydb <- dbConnect(SQLite(), dbname = "example.db")
-
-db_insert_lin(xx, yy, "graph", mydb)
-
-dbDisconnect(mydb)
 }

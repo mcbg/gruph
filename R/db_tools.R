@@ -4,6 +4,8 @@
  
 #' @useDynLib gruph
 #' @importFrom Rcpp sourceCpp
+#' @importFrom graphics par plot
+#' @importFrom stats df pchisq rnorm
 NULL
 
 #' \code{db_insert_quad} adds all expression-expression (quadratic) edges to a database. It inserts edges
@@ -13,16 +15,9 @@ NULL
 #' @param tb_name string with name for DB table
 #' @param chnk_size number of rows in each chunk
 #' @param db connection to database 
+#' @param gaussian uses gaussian distribution if true; degenerate if false
 #' 
 #' @import RSQLite
-#' @examples 
-#' library(RSQLite)
-#' mydb <- dbConnect(SQLite(), dbname = "example.db")
-#' data <- as.matrix(iris[, 1:4])
-#' 
-#' db_insert_quad(data, "graph", 2, mydb)
-#'
-#' dbDisconnect(mydb)
 #' @export
 
 db_insert_quad <- function(xx, tb_name, chnk_size, db, start = 1, gaussian = FALSE) {
@@ -65,15 +60,9 @@ db_insert_quad <- function(xx, tb_name, chnk_size, db, start = 1, gaussian = FAL
 #' @param clinical matrix of clinical variables (discrete)
 #' @param tb_name string with name for DB table
 #' @param db connection to database 
+#' @param gaussian uses gaussian distribution if true; degenerate if false
 #' 
 #' @import RSQLite
-#' @examples 
-#' library(RSQLite)
-#' mydb <- dbConnect(SQLite(), dbname = "example.db")
-#' 
-#' db_insert_lin(xx, yy, "graph", mydb)
-#' 
-#' dbDisconnect(mydb)
 #' @export
 
 db_insert_lin <- function(expr, clinical, tb_name, db, gaussian = FALSE) {
@@ -97,10 +86,6 @@ db_insert_lin <- function(expr, clinical, tb_name, db, gaussian = FALSE) {
 #' @param tb_name string of table name
 #' @param slices the number of slices to compute
 #' 
-#' @examples
-#' mydb <- dbConnect(SQLite(), dbname = "example.db")
-#' db_max_span_forest(mydb, 100)
-#' 
 #' @import RSQLite
 #' @export
 
@@ -112,6 +97,7 @@ db_max_span_forest <- function(db, tb_name, slices) {
   
   # ISSUE: LIMIT IS HARD CODED
   # ISSUE: table is hard coded
+  # ISSUE: number of vertices is hardcoded!!!!
   mk_query <- function(minWeight) {
     paste0("SELECT *
            FROM ", tb_name, 

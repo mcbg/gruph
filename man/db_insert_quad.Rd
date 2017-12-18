@@ -15,17 +15,10 @@ db_insert_quad(xx, tb_name, chnk_size, db, start = 1, gaussian = FALSE)
 \item{chnk_size}{number of rows in each chunk}
 
 \item{db}{connection to database}
+
+\item{gaussian}{uses gaussian distribution if true; degenerate if false}
 }
 \description{
 \code{db_insert_quad} adds all expression-expression (quadratic) edges to a database. It inserts edges
 using chunks, to limit memory usage.
-}
-\examples{
-library(RSQLite)
-mydb <- dbConnect(SQLite(), dbname = "example.db")
-data <- as.matrix(iris[, 1:4])
-
-db_insert_quad(data, "graph", 2, mydb)
-
-dbDisconnect(mydb)
 }

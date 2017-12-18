@@ -6,6 +6,11 @@
 \usage{
 pval_dataframe(edges, N)
 }
+\arguments{
+\item{edges}{data frame of edge list}
+
+\item{N}{integer showing the number of observations.}
+}
 \description{
 \code{pval_dataframe} extract p-values of edges.
 }

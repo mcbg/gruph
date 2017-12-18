@@ -21,6 +21,7 @@ igraph_style <- function(g) {
 #' @export
 glasso_plot <- function(tree, glasso) {
   
+  #ISSUE: ??????????????????
   stopifnot(all(V(tree)$name == V(glasso)$name))
   
   g <- glasso + edges(t(as_edgelist(tree)), color = 'gray30')

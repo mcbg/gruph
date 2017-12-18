@@ -6,6 +6,11 @@
 \usage{
 weight_plot(edges, N)
 }
+\arguments{
+\item{edges}{data frame of edge list}
+
+\item{N}{integer showing the number of observations.}
+}
 \description{
 \code{weight_plot} plots the p-values of weights for model diagnostics.
 }
