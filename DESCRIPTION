@@ -9,7 +9,9 @@ Description: Fits graphical models. Supports gaussian, discrete, and mixed model
 License: GPL (>= 2)
 Imports:
   BH,
-  Rcpp (>= 0.12.9)
+  Rcpp (>= 0.12.9),
+  igraph,
+  glasso
 Suggests:
   ggplot2
 LinkingTo:
