@@ -25,10 +25,14 @@ NULL
 #' dbDisconnect(mydb)
 #' @export
 
-db_insert_quad <- function(xx, tb_name, chnk_size, db, start = 1) {
+db_insert_quad <- function(xx, tb_name, chnk_size, db, start = 1, gaussian = FALSE) {
   
   insert_chunk_into_db <- function(k) {
-    edges <- chunk_builder(xx, k, chnk_size)
+    if (gaussian) {
+      edges <- chunk_builder_gaussian(xx, k, chnk_size)
+    } else {
+      edges <- chunk_builder(xx, k, chnk_size)
+    }
     
     dbWriteTable(db,
                  tb_name,
@@ -72,8 +76,12 @@ db_insert_quad <- function(xx, tb_name, chnk_size, db, start = 1) {
 #' dbDisconnect(mydb)
 #' @export
 
-db_insert_lin <- function(expr, clinical, tb_name, db) {
-  edges <- full_linear(expr, clinical)
+db_insert_lin <- function(expr, clinical, tb_name, db, gaussian = FALSE) {
+  if (gaussian) {
+    edges <- full_linear_gaussian(expr, clinical)
+  } else {
+    edges <- full_linear(expr, clinical)
+  }
     
   dbWriteTable(db,
                tb_name,

@@ -4,7 +4,7 @@
 \alias{db_insert_lin}
 \title{\code{db_insert_lin} adds all expression-clinical (linear) edges to a database.}
 \usage{
-db_insert_lin(expr, clinical, tb_name, db)
+db_insert_lin(expr, clinical, tb_name, db, gaussian = FALSE)
 }
 \arguments{
 \item{expr}{matrix of expression levels}

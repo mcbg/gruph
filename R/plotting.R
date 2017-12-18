@@ -4,11 +4,14 @@ calc_pval <- function(edges, N) {
                         call. = FALSE)
   }
   dfs <- edges$df 
-    ws <- edges$weights
-    get_p_value <- function(w, degrees) pchisq(2 * w, degrees, lower.tail = TRUE)
-      unlist(Map(get_p_value, ws, dfs))
+  ws <- edges$weights
+  get_p_value <- function(w, degrees) pchisq(2 * w, degrees, lower.tail = TRUE)
+  unlist(Map(get_p_value, ws, dfs))
 } 
 
+#' \code{pval_dataframe} extract p-values of edges.
+#' @import ggplot2
+#' @export
 pval_dataframe <- function(edges, N) {
     pvals <- calc_pval(edges,N)
   pvals <- pvals[order(-pvals)]
@@ -17,12 +20,10 @@ pval_dataframe <- function(edges, N) {
                             p = pvals)
 }
 
+#' \code{weight_plot} plots the p-values of weights for model diagnostics.
+#' @import ggplot2
+#' @export
 weight_plot <- function(edges, N) {
-    if (!requireNamespace("ggplot2", quietly = TRUE)) {
-          stop("ggplot2 needed for this function to work. ",
-                        call. = FALSE)
-  }
-  # N: number of observations
   
   xx <- pval_dataframe(edges, N)
     

@@ -5,7 +5,7 @@
 \title{\code{db_insert_quad} adds all expression-expression (quadratic) edges to a database. It inserts edges
 using chunks, to limit memory usage.}
 \usage{
-db_insert_quad(xx, tb_name, chnk_size, db, start = 1)
+db_insert_quad(xx, tb_name, chnk_size, db, start = 1, gaussian = FALSE)
 }
 \arguments{
 \item{xx}{matrix of expression levels}
