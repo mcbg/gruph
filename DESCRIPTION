@@ -10,10 +10,13 @@ License: GPL (>= 2)
 Imports:
   BH,
   Rcpp (>= 0.12.9),
+  RSQLite,
+  testthat,
+  ggplot2,
   igraph,
-  glasso
-Suggests:
-  ggplot2
+  glasso,
+  stats,
+  graphics
 LinkingTo:
   Rcpp,
   BH
