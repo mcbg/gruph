@@ -1,7 +1,7 @@
 Package: gruph
 Type: Package
 Title: Fits graphical models. 
-Version: 2.0
+Version: 2.1
 Date: 2017-04-28
 Author: Michael Galanakis
 Maintainer: Michael Galanakis <vhg505@alumni.ku.dk>
