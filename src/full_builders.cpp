@@ -37,8 +37,8 @@ List full_dinit(const Rcpp::NumericMatrix xx, int offset)
 }
 
 // [[Rcpp::export]]
-List full_linear(const Rcpp::NumericMatrix xx, 
-                 const Rcpp::NumericMatrix yy)
+List full_linear(const Rcpp::NumericMatrix xx, // continuous
+                 const Rcpp::NumericMatrix yy) // discrete
   {
     gaussian_degenerate_zero_mixed model(0);
     df_wrapper wrpr;

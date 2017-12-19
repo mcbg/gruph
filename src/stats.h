@@ -138,7 +138,7 @@ public:
     // step 3) calc ssd
     double ssd = anova_var(x, y, df); // changes df
     
-    return 0.5 * log(ssd0 / ssd);
+    return 0.5 * log(ssd0 / ssd) * x.size();
  }
 };
 #endif
