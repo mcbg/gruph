@@ -1,5 +1,5 @@
 calc_pval <- function(edges, N) {
-    if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  if (!requireNamespace("ggplot2", quietly = TRUE)) {
           stop("ggplot2 needed for this function to work. ",
                         call. = FALSE)
   }

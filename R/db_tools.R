@@ -15,6 +15,7 @@ NULL
 #' @param tb_name string with name for DB table
 #' @param chnk_size number of rows in each chunk
 #' @param db connection to database 
+#' @param start which chunk to start at 
 #' @param gaussian uses gaussian distribution if true; degenerate if false
 #' 
 #' @import RSQLite
