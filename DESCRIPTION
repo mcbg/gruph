@@ -1,6 +1,6 @@
 Package: gruph
 Type: Package
-Title: Fits graphical models. 
+Title: gruph - graphical models for RNA-Seq 
 Version: 2.1
 Date: 2017-04-28
 Author: Michael Galanakis
