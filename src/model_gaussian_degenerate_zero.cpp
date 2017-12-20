@@ -65,9 +65,10 @@ double gaussian_degenerate_zero::mutual_information(variable x, variable y)
   // calculate I(X,Y)
   if (include_gaussian_term) {
     double rho = this->local_cor(x,y);
-    if (rho * rho < 1)
+    if (rho * rho < 1) {
       information += p[1][1] * n * gaussian_mutual(rho);
-    df += 1;
+      df += 1;
+    }
   }
     
   return information;

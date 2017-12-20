@@ -43,9 +43,9 @@ glasso_plot <- function(tree, glasso) {
 #' 
 #' @import igraph
 #' @export
-make_igraph <- function(myedges, dataset) {
+make_igraph <- function(myedges, dataset, proband='mutation') {
   # ISSUE: lazy hardcoded
-  vnames <- c(colnames(dataset$expression), "mutation")
+  vnames <- c(colnames(dataset$expression), proband)
   g <- graph_from_edgelist(as.matrix(myedges[, 1:2]), directed = FALSE)
   V(g)$name <- vnames
   g <- igraph_style(g)
