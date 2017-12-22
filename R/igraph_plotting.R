@@ -12,19 +12,25 @@ igraph_style <- function(g) {
 #' \code{glasso_plot} adds edges to our tree, that are computed
 #' using the glasso algorithm. These makes most sense for vertices
 #' that are roughly Gaussian.
-#' @param rho the penalty of the glasso
+#'
 #' @param tree a igraph object of our tree
 #' @param dataset our dataset to fit the glasso
+#' @param rho the penalty of the glasso
 #' 
 #' @import glasso
 #' @import igraph
 #' @export
-glasso_plot <- function(tree, glasso) {
+
+glasso_plot <- function(tree, dataset, rho) {
   
-  #ISSUE: ??????????????????
+  # ISSUE: THIS DOESNT WORK
+  # check that tree and data fit
   stopifnot(all(V(tree)$name == V(glasso)$name))
   
-  g <- glasso + edges(t(as_edgelist(tree)), color = 'gray30')
+  M <- cor(dataset)
+  g <- glasso(M, rho = rho)
+
+  #g <- glasso + edges(t(as_edgelist(tree)), color = 'gray30')
   #g <- union(tree, glasso, byname = 'auto')
   #g <- style_graph(g)
   #g <- gene_fam_style(g)
@@ -44,7 +50,6 @@ glasso_plot <- function(tree, glasso) {
 #' @import igraph
 #' @export
 make_igraph <- function(myedges, dataset, proband='mutation') {
-  # ISSUE: lazy hardcoded
   vnames <- c(colnames(dataset$expression), proband)
   g <- graph_from_edgelist(as.matrix(myedges[, 1:2]), directed = FALSE)
   V(g)$name <- vnames
